@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur d'équilibres financiers d'opérations · Action Logement Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Palette Thème : GRIS SOUTENU · BLANC PUR · ROUGE AL */
+      --al-red: #E2004B;
+      --al-red-hover: #C5003E;
+      --al-red-subtle: #FFF0F4;
+      --al-red-border: #F8B4C4;
+      --al-red-glow: rgba(226, 0, 75, 0.18);
+
+      --al-white: #FFFFFF;
+      --al-bg: #EAEFF5;
+
+      --al-border-card: #C5D2E0;
+      --al-border-card-hover: #9CB2C8;
+      --al-border-input: #A9BCCF;
+      --al-border-subtle: #DDE5ED;
+
+      --al-gray-header: #F4F7FB;
+      --al-gray-pill: #E2EAF2;
+      --al-gray-pill-hover: #D3DFEC;
+
+      --al-text-heading: #09192E;
+      --al-text-primary: #1E293B;
+      --al-text-label: #2D3E50;
+      --al-text-muted: #5A6D82;
+
+      --al-success: #059669;
+      --al-success-bg: #ECFDF5;
+      --al-success-border: #86EFAC;
+      --al-amber: #D97706;
+      --al-amber-bg: #FFFBEB;
+      --al-amber-border: #FCD34D;
+
+      --al-radius-card: 12px;
+      --al-radius-pill: 9999px;
+      --al-radius-tab: 10px;
+      --al-radius-input: 8px;
+
+      --al-shadow-card: 0 3px 12px rgba(9, 25, 46, 0.05), 0 1px 3px rgba(9, 25, 46, 0.03);
+      --al-shadow-card-hover: 0 8px 24px rgba(9, 25, 46, 0.08);
+      --al-shadow-btn-red: 0 4px 14px rgba(226, 0, 75, 0.28);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--al-text-primary);
+      background-color: var(--al-bg);
+      line-height: 1.5;
+      font-size: 13.5px;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .al-header {
+      background: var(--al-white);
+      border-bottom: 2px solid var(--al-border-card);
+      padding: 14px 36px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(9, 25, 46, 0.04);
+    }
+    .al-header-inner {
+      max-width: 1540px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .al-brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .al-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .al-header-title-box {
+      border-left: 2px solid var(--al-border-card);
+      padding-left: 20px;
+    }
+    .al-header-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--al-text-heading);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.2px;
+    }
+    .badge-eureka {
+      background: var(--al-red);
+      color: var(--al-white);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 6px var(--al-red-glow);
+    }
+    .al-header-sub {
+      font-size: 12px;
+      color: var(--al-text-muted);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .al-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--al-success-bg);
+      border: 1.5px solid var(--al-success-border);
+      color: var(--al-success);
+      padding: 5px 14px;
+      border-radius: var(--al-radius-pill);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .status-chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--al-success);
+    }
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--al-gray-pill);
+      border: 1.5px solid var(--al-border-card);
+      padding: 4px 14px 4px 6px;
+      border-radius: var(--al-radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--al-text-heading);
+    }
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--al-red);
+      color: var(--al-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .al-nav-bar {
+      background: var(--al-white);
+      border-bottom: 2px solid var(--al-border-card);
+      padding: 10px 36px;
+    }
+    .al-nav-tabs {
+      max-width: 1540px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-pill-btn {
+      appearance: none;
+      background: var(--al-gray-pill);
+      color: var(--al-text-heading);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-tab);
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .nav-pill-btn svg {
+      stroke-width: 2.2;
+    }
+    .nav-pill-btn:hover {
+      background: var(--al-gray-pill-hover);
+      border-color: var(--al-border-card-hover);
+      transform: translateY(-1px);
+    }
+    .nav-pill-btn.active {
+      background: var(--al-red) !important;
+      color: var(--al-white) !important;
+      border-color: var(--al-red) !important;
+      box-shadow: var(--al-shadow-btn-red);
+    }
+    .nav-pill-btn.active svg {
+      color: var(--al-white);
+    }
+
+    .main-wrap {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 24px 36px 80px 36px;
+    }
+
+    /* Bandeau Dossier */
+    .op-banner-card {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-top: 3.5px solid var(--al-red);
+      border-radius: var(--al-radius-card);
+      padding: 20px 26px;
+      margin-bottom: 22px;
+      box-shadow: var(--al-shadow-card);
+    }
+    .op-banner-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .op-fields-row {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .op-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .op-field-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--al-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .op-input-styled {
+      height: 40px;
+      border: 1.5px solid var(--al-border-input);
+      border-radius: var(--al-radius-input);
+      padding: 0 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--al-text-heading);
+      background: var(--al-white);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .op-input-styled:hover {
+      border-color: var(--al-border-card-hover);
+    }
+    .op-input-styled:focus {
+      outline: none;
+      border-color: var(--al-red);
+      box-shadow: 0 0 0 3px var(--al-red-glow);
+    }
+
+    .op-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-al-action {
+      padding: 9px 18px;
+      border-radius: var(--al-radius-input);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-al-red {
+      background: var(--al-red);
+      color: var(--al-white);
+      border: 1.5px solid var(--al-red);
+      box-shadow: var(--al-shadow-btn-red);
+    }
+    .btn-al-red:hover {
+      background: var(--al-red-hover);
+      border-color: var(--al-red-hover);
+      transform: translateY(-1.5px);
+    }
+    .btn-al-outline {
+      background: var(--al-white);
+      color: var(--al-text-heading);
+      border: 1.5px solid var(--al-border-card);
+    }
+    .btn-al-outline:hover {
+      background: var(--al-gray-pill);
+      border-color: var(--al-border-card-hover);
+      transform: translateY(-1.5px);
+    }
+
+    /* Barre KPI Quick */
+    .kpi-quick-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .kpi-tile {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-card);
+      padding: 16px 20px;
+      box-shadow: var(--al-shadow-card);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+    .kpi-tile:hover {
+      border-color: var(--al-border-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--al-shadow-card-hover);
+    }
+    .kpi-tile-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1.5px solid var(--al-border-card);
+      background: var(--al-gray-header);
+    }
+    .kpi-tile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      overflow: hidden;
+    }
+    .kpi-tile-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--al-text-muted);
+    }
+    .kpi-tile-value {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--al-text-heading);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .kpi-tile-sub {
+      font-size: 11.5px;
+      color: var(--al-text-primary);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Sélecteur de Phases Dynamique */
+    .phase-bar-card {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-card);
+      padding: 14px 24px;
+      margin-bottom: 22px;
+      box-shadow: var(--al-shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .phase-pills-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .phase-label-lead {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--al-text-heading);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 6px;
+    }
+    .phase-choice-pill {
+      padding: 8px 18px;
+      border-radius: var(--al-radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      border: 1.5px solid var(--al-border-card);
+      background: var(--al-gray-pill);
+      color: var(--al-text-heading);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .phase-choice-pill .badge-lots {
+      background: var(--al-white);
+      color: var(--al-text-heading);
+      border: 1px solid var(--al-border-card);
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .phase-choice-pill:hover {
+      background: var(--al-gray-pill-hover);
+      border-color: var(--al-border-card-hover);
+      transform: translateY(-1.5px);
+    }
+    .phase-choice-pill.active {
+      background: var(--al-red) !important;
+      color: var(--al-white) !important;
+      border-color: var(--al-red) !important;
+      box-shadow: var(--al-shadow-btn-red);
+    }
+    .phase-choice-pill.active .badge-lots {
+      background: rgba(255, 255, 255, 0.25);
+      color: var(--al-white);
+      border-color: transparent;
+    }
+
+    .btn-add-phase {
+      appearance: none;
+      background: #FFFFFF;
+      border: 1.5px dashed var(--al-border-card);
+      color: var(--al-text-muted);
+      border-radius: var(--al-radius-pill);
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-add-phase:hover {
+      border-color: var(--al-red);
+      color: var(--al-red);
+      background: var(--al-red-subtle);
+    }
+
+    .phase-total-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--al-gray-pill);
+      padding: 7px 16px;
+      border-radius: var(--al-radius-input);
+      border: 1.5px solid var(--al-border-card);
+      font-size: 12.5px;
+      color: var(--al-text-muted);
+    }
+    .phase-total-badge strong {
+      color: var(--al-text-heading);
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Grille des Cartes */
+    .grid-3-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .al-card {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-card);
+      box-shadow: var(--al-shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+    .al-card:hover {
+      border-color: var(--al-border-card-hover);
+      box-shadow: var(--al-shadow-card-hover);
+      transform: translateY(-2px);
+    }
+    .al-card-header {
+      padding: 15px 20px;
+      border-bottom: 1.5px solid var(--al-border-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--al-gray-header);
+    }
+    .al-card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--al-text-heading);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.2px;
+    }
+    .card-title-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--al-border-card);
+      background: var(--al-white);
+      flex-shrink: 0;
+    }
+    .card-badge-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+      border: 1.5px solid var(--al-border-card);
+      background: var(--al-white);
+      color: var(--al-text-heading);
+    }
+
+    .al-card-body {
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      background: var(--al-white);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--al-text-label);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      letter-spacing: 0.2px;
+    }
+    .label-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .label-hint {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--al-text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* INFOBULLES MÉTHODOLOGIQUES PROFESSIONNELLES (ACTION LOGEMENT) */
+    .info-tip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #D9E3EE;
+      color: #3B526B;
+      font-size: 10px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: help;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .info-tip:hover {
+      background: var(--al-red);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px var(--al-red-glow);
+    }
+    .info-tip .tip-box {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: #09192E;
+      color: #FFFFFF;
+      font-size: 11.5px;
+      font-weight: 500;
+      line-height: 1.45;
+      padding: 8px 12px;
+      border-radius: 8px;
+      width: max-content;
+      max-width: 270px;
+      text-align: left;
+      z-index: 1000;
+      box-shadow: 0 6px 22px rgba(9, 25, 46, 0.3);
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: normal;
+    }
+    .info-tip .tip-box::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #09192E transparent transparent transparent;
+    }
+    .info-tip:hover .tip-box {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .form-grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sélecteurs avec flèche (Data Validation Excel Dropdown Look) */
+    .form-control {
+      height: 40px;
+      border: 1.5px solid var(--al-border-input);
+      border-radius: var(--al-radius-input);
+      padding: 0 13px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--al-text-heading);
+      background: var(--al-white);
+      transition: all 0.2s ease;
+      font-family: inherit;
+      width: 100%;
+    }
+    select.form-control {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232D3E50' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+      appearance: none;
+    }
+    .form-control:hover {
+      border-color: var(--al-border-card-hover);
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--al-red);
+      box-shadow: 0 0 0 3px var(--al-red-glow);
+    }
+    .form-control-calc {
+      background: var(--al-gray-header);
+      border-color: var(--al-border-card);
+      font-weight: 700;
+      font-family: inherit;
+      color: var(--al-text-heading);
+      cursor: default;
+      font-size: 12px;
+      padding: 0 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .form-control-num {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-feature-settings: "tnum";
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Jauge Ratio */
+    .ratio-panel {
+      background: var(--al-gray-header);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .ratio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+    }
+    .ratio-track {
+      height: 12px;
+      background: var(--al-gray-pill);
+      border: 1px solid var(--al-border-card);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+    .ratio-bar {
+      height: 100%;
+      background: var(--al-success);
+      border-radius: 8px;
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+    }
+    .ratio-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--al-text-muted);
+      font-weight: 600;
+    }
+
+    /* Calendrier des Jalons */
+    .calendar-card {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-card);
+      box-shadow: var(--al-shadow-card);
+      overflow: hidden;
+      margin-bottom: 24px;
+      transition: all 0.2s ease;
+    }
+    .calendar-card:hover {
+      border-color: var(--al-border-card-hover);
+      box-shadow: var(--al-shadow-card-hover);
+    }
+    .calendar-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      position: relative;
+    }
+    .milestone-box {
+      background: var(--al-gray-header);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .milestone-box:hover {
+      border-color: var(--al-border-card-hover);
+      background: var(--al-white);
+      box-shadow: 0 2px 8px rgba(9, 25, 46, 0.04);
+    }
+    .milestone-box.highlight {
+      border-color: var(--al-red);
+      background: var(--al-white);
+      box-shadow: 0 0 0 1px var(--al-red);
+    }
+    .milestone-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--al-text-heading);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .milestone-badge-step {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--al-text-heading);
+      color: var(--al-white);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .milestone-box.highlight .milestone-badge-step {
+      background: var(--al-red);
+    }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--al-text-heading);
+      color: var(--al-white);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(9, 25, 46, 0.2);
+      transform: translateY(120px) scale(0.95);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+    }
+    .toast-msg.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--al-red);
+      color: var(--al-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    
+    /* Ruban de validation et navigation vers l'étape suivante */
+    .bottom-actions-ribbon {
+      background: var(--al-white);
+      border: 1.5px solid var(--al-border-card);
+      border-radius: var(--al-radius-card);
+      padding: 18px 26px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--al-shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .bottom-ribbon-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .ribbon-check-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--al-success-bg);
+      color: var(--al-success);
+      border: 1.5px solid var(--al-success-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .bottom-ribbon-btns {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-al-next-cta {
+      padding: 12px 24px;
+      font-size: 13.5px;
+      letter-spacing: 0.2px;
+    }
+
+    .page-footer {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1.5px solid var(--al-border-card);
+      text-align: center;
+      font-size: 12px;
+      color: var(--al-text-muted);
+      line-height: 1.6;
+    }
+    .page-footer strong {
+      color: var(--al-text-heading);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1200px) {
+      .kpi-quick-bar { grid-template-columns: repeat(2, 1fr); }
+      .grid-3-cards { grid-template-columns: 1fr; }
+      .calendar-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .al-header, .al-nav-bar, .main-wrap { padding-left: 16px; padding-right: 16px; }
+      .kpi-quick-bar, .calendar-grid-4 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER CORPORATE -->
+  <header class="al-header">
+    <div class="al-header-inner">
+      <div class="al-brand">
+        <div class="al-logo-wrap">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbQAAABkCAYAAADufcXdAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAKDtJREFUeJztXQnYXsPZbiyxr3kSSxD7HvtW+UuUlthbS1ElVYqiDWqtVBS170KLEmttP+1v34MqYi9KSxPb2AlaO/E/d2eOb755ZzvnPe/3vt+X576u+yLfmXlm5rznzH1m5plnvvENgUAgEAhaCDXTZtMyt2X+hfk087fMOdpdL4FAIBAIssHCtRjzGuZXDp9ljmBO1+46CgQCgUAQBAvVPMzTmO95xKzgl8ybmGtgFNfuOgsEAoFA8DVYmKZh7sJ8OSJkLj9lnsmctd31FwgEAoEAYjacOT4hXlMi115k7sfs3+62CAQCgWAqBAvQvMz/TQjZq8wdmEOZt5jpxlDaZ5jrYbTX7rYJBAKBYCoAC86czF8xX4uI0/vMEyB6Vr4ZzbTks5F8nzAvYi7XzjYKBAKBoA+DRWZm5t7Mv0cE6WPm75lLROzMyhzFVBE7HzLPYs7fk20UCAQCQR8HC8sKGdOLjzK3Z/bLtLkM84rENOSTzB2VeEMKBAKBoBlghMQ8n/l5RHReYe7OnL5iGXAquTkhlvcxN6+7fQKBQCDo4zDrXXsy/5NY74LYzVxTmXsbcYwJ23nM+eooTyAQCAR9GCwW/ZnbMR+IiMpnZvpxtdzpxRLlD1Q6RNbbkfLfYI5hzl1n2QKBQCDoIzDOGvAw/CIiJi8o7Ybf0jUttr8Q89bEaA11WbmV9RAIBAJBLwSLw68j4jGZOZo5Uw/XaSvmhEi9/tqT9REIBAJBLwCLwziPYMAN/yTmXIm8cOn/iVl3mz2zvH7MbZQOYjwW042BdNMpvX/tGU/9/lWlrQKBQCDow/AIGgIMb6gyIuNzmuPMVCVCXP0hs7xVzMivKO+cSFqI34LMc43IfmXKOrJMGwUCgUAwFcAjaJMy8+GomHetfJ/nrG0Z5w+7vNcyy0MYrd2Y384RW4FAIBBMZWhC0E71TAWel5HvBCfPm823QiAQCARTPaoImtIBij/xCBrc7udN5BVBEwgEAkH9qChoB0U8EHdO5BVBEwgEAkH9KCtoSm/CnhQRtDtVZL+aCJpAIBAIWoIKgraDkx5Tj586/142kl8ETSAQCAT1o4ygKR1VxD1G5kTmtc7fgm71ImgCgUAgaAlKCtoPnbTYszZE6X1r9t8/UuEN0yJoAoFAIKgfuYKGdTHVeNwLghVPo3SU/jecaz8N2BFBEwgEAkH9KCFoa6rurvqIvr+udf14x85DyhOVXwRNIBAIBC1BCUE7zUmH4MEzWtdXc64jRNXiHjvtEzSlj+C+nHmlxUuZC/RYJToQ3P45mIcrHZSzf7vr00mgYXscxTyIKecWCQQdjhxB47+txHzLSXefyWvzQyfNce4ord2Cdq5TeMFTeqwSHQRu9/TM7zInWvcC+y7W9g2vp0awkL3A/Ir5AXNPZlYUboFA0PPIFLSzAzqQ4kvMIY6t9gia0kcDuKpc8DUV8GLpy+A276j8B+FF915MTbAEreDzzDHMwe2um0Ag6I6UoPG/BzDfryho4L6OvbYJ2t6Jim7TIxXpIHCb94rcj9XbXb9OgEfQCirmJu2un0Ag6EKGoO3fhJiBD2Nmy7LX84KmtCvmPYmKXtryinQYRNDSiAgaONU9MwJBJyMmaEq76j/rXL+Q+bMID1ON3pCrWTZdQcOxMxMy+aDSy2DlZns4w7Kq60A1u2L2vzEdOajGe9tyKL0GhtNSL2HOXyH/7hFBS54FNDUgIWhXtrt+AoGgCwlBG+Vce4E5Z8IeBkN3OfnGWtddQavCG8o28ueOgS+Z5zt/g1vmFqXvYBtghGx9pTcGFl8PG1awM5/S5wB9YN2Hl5lHMGdoRd17G0TQBILeg4Sg3eRcy3IG5HQ7Ofkesa65B3xW4cQyDZxOaZdM28DzzCWZ7zh/v0J1uHef+WLAMNl15qi8nqP0CPZi5kkQuTrr29shgiYQtB78Ls3A3Iw5jhk9gyyGhKAdaQYu+DtOp14q0yamKh+1bI6zrq3CnNykoGUdQloUuDjz346BcUYY/uT8XTEXLXMDexpcv9mVdh91b4o4KLQAImgCQWvB79Ew5lXMT817NbyqrYSgwdP9GOY1zB1K2l1V6X3LmNkbYv29H/MHSgc0viGTLzcjaGc4maHQI8y1dT3CMLpMQ3saXL85jfCKoPUARNAEgvrB7860zBHMWz3v1fCqdj2ChlOnGyJ8tAtKn792SyVBU3q60R0OPsKc21zHKM3dm/ZkS1vUJETQehYiaAJBveD3Zhq8O5H3anhV29wPXuDpG3G+GaYbZ66xGWXrBa3ZnPlM5SlHTvgdT+YjnDQXekZwWXOrGeVjOLooc2ulFw/HmWEr1urOUdoldAtVwkMxImi7MZfwEFOuWeGslD4faFvm0hXbO4/SkUf2VdrZpGjvRWak/EvmZqqsm2pX3fZgLphIh0jZiMOGfYdjmZcp7QV6ptJeTmuUebBF0ASCesHvzczMSS0StDGevrHo159gbq+sfWQ9AdMfwUfhk0DdHs415At1tbKT5nueNIfV0IihzOuY/wk0wiYWKDG3Gtz7pfQOd+yL+LNq3HIAfm7+7hI3MXhAnWV/A+Zj5oc/vWRb12LeqPTwPmcRFKNmeBytX6KMdVTXFMIByjkWXekvoO3MQ+uLflIQHq5P55bdTkFj+9MzV2Z+nznScCvzt5bH3OQypmMuyFzJcGnmQszZmC1xnmK785hylqIWxc9ku0FXbdxXU/4ScFQoYRP3alGTd5Z6auotA7/HUOYizJlaVM5ckWv9mIOYyzMHY+qwgv1ZWiho8Ny+M/L+TzHX16paRom69Dcf0h9F6oM+Oj27pvR0o3umDRbj3OCSs3kKfCRkN6NceMT8MtGIECE+GM0s5NgcHhCxXI6L1HeAKXOKlX5sKL2Tl0zeTyvWCyKMUVzSs9LcAzvv/RA5c20B5vUV7vVo93lw0dOCxjaXYf6W+QDz40jZHzHvYx7BXKymsiFUOzIvZD5LXYv0Pk5hvs98hfkk8x7mtcxdSpSHqaf/YZ7EnGDsueW8w7ydeSg68ybbt4mx9To6ZevvczL3Y97J/MQq+wvmY6RjeDZ81fPfBjJ/ybzN/B72vUGItOMhcE3Udw7mNsyLmf/w/B5TjDDAoWLnZgWO86/AHGvuwUjr7/3MvfsD81WnDh+a3340ZX6AmPumIs/WzaS9HW2eg+czxz6/0zMxD1T+mayC6J8RbLj2jyajPTsz/xUpHx/WmL3Kc0LkhBt7jJwYSPtHT9p1fWkTZc6g9NBySqQhOXzMsbtJk/bGRersHjeeJWicZjGlNyY2U6+CePCisSM9gga+qPSUres1lEuM5H4YK7enBM10JnebTjRUXohfmE6gUvxNzkfMw5iTK5TtcnxGeXAI2JD5dEnbn5jOO3vKmrQ7+E7Mhy07aCdGFzMyj2S+mVE28g8yNjGKPJN0wOpUPnT4O5X8PfBhgRMe3il5f94wv+OM6VK6lbc+6TUt+9kbRfqDAzMCT2SWj/u4baQc3O8Dme9VfLaWK9MupZcp4NUYmyWDB/whyjo6phkoPeP3eKLfwf7hFcsYxfTTWR5D3wmk30g1TlONq9CYQzM6UOx9w7RZaD4VvNixu16TgnFmpM7uHr2koPH1hVQ6lNgU8yBNNg9NbBoQxAF6wQDRAUH7WIWnOTGi/TCjXDgJBdfUqMWCZnUaL1V8yW0+x9y4ZPmYWoOQfllD+UlBIz2lh1GlbzSWy0eYq2a0bW3mjczPnPwQtFWYV5dsN0aSGFE+WrK+EJrVUvU1dcZ03k3MzyveG+Q7l6wRaKQsfMj8nvzCfDjzROo+8szhu8xhgfKOo2ofbJUEDTBaMIx5W6QvwGjpLqV9LkpPoZpylmaerhqPnLGJ/c8YOWaNNG3jS6lG78VJKrAYyH+fhflPJ32pCPxKn7ETEqmnlHZowHlsmOOF8wQcNqDmOMrgdSstpu+WdGwjMsgIpcNcjVSNG8LBY8x1lxjBDIjUu5SgKT2cvibyYNzN3EfphdAhzMFKCyDa/lOl1xVD06f4cvGuWyi/oLnEb44PGXygYOP8IsxllN4ngrXHzwN1DgamptYL2k+o+zRXs8S01I6ZZW/AnFhj2VFBI70GdArVI55vM78VKWv2QEdddPo5ozKXnzXxWz2D9id+j/lJi3Udv8NDlF4Luy6S/z9NlI3p44bpT/7bpU22qbSgFVB6PWtLpeMnhvoP9L04L3PNEnbRnx+l4purXzVpqGrl3VBXYNTRg6//3pMnKxSWEZxLA425OCYoJv8g5slKj2iiDhmqZrf9CoK2dkAYMCLDCDX60irt+fmjiLiMCORLCRqcUoJrLEqvbZ4SyHt9KB+1UNA4/+Kkv2jrFJSiM4quN/H1ARU79RTHR8rcmaqPPHz8OwXOp+O/L9yCtjVL78jF1BcOQLfXXN5ZifL+2aJ24oOlYcmG2ihoBZT2gkZov9gRMh+rjPB/fH0r1X0w4iOc30rH2bUL8UXWh/JG5yyVHgG5lcmKpm46ed/o7AFV8wnQHSBoF3nSQ5x2Llku3Pd9w3N4ezY4akQEDdMIJ6oMV1xz7yZ5bASPfKAWCRrpqcbcDgwdBIQPayq5Uzb3UsRJoIbOJcTxgfLmZf67BeWdECivEwXtCF9dTX1/RNrJo87y8Nx4RxvUWkEDGz7M+W/nN2mzlu1UgNIzR74QgjZfUXpGbDonL/qi8Qkhg9Oa9+O8bEUxled6GD6e6vBMZ/eKkw/qGx1dmbzHBRoVnBKpinYKmtJ72l71pP8/5jQVynajuID4cmoYXUQEba8yZSv/2irondem1gnaiIwXGIKHNZtZrHxwcliDtEdhaurue4GyV0h0nrALz7WtSbuHD7QIt/3jI3nHB8o8OlHXScxdSY9asY6E6TdsFTiE4s4XaEfDlzvlCRraCWeabUm7whdrbjmdK9aW4H0Ih4rlTd7zEr/JNYF7A3GJrcuhjVhX24i5gPkdhjDXIf1hEvvIgZdmg8MD5Qsa2nM/czvS646rmd8p5qUIvugpE7MCw007XovkHWXS2Vw78jpVhtJLErFpSBDbmbA1CUsn8Mr+MpIWmrGzK4LNVHAfTyHHZua93MmXjMCv9BTavZ4yH6rSyWfUsZ2Ctovnx8Q92qxi2Qjs6XP5b3D9DgganE1KLeIqvbHS9yAu7EtPrRO02NcqOqiTfB2RlR/OFQcnOrMrPPkwMrwiUTY85YLTLXztgEj+8Z70WK95LpLnr8x5IuWtSo3u4jaP8eRJCRpEchdy3PFJu8q/kcgLscdHwTRO3hlM5x/Kd3+gfdhXGNsicQIF1t9Ir0vuFcmLKd7/8eTLETSs+23qexZI77eLecVChGcN1Lll+9CqQGkfCvg4/CMiVJhNcv0ybMKvAf4Q9Z1kr/Q6iTvdiA44S92V3pjrVvSmRB7fyA7cp55Wectrl6D5RlTY61dpsVPphVpfKJiGL9mAoJU+HVbpkwV8D6R3fp5aJ2ixL9y73I42Yic2dfgyOmgnPb7wYx6Gl4U6T8tGWUFbKpIeI4B1MtoZG+E1hKujuKB9FOs0Se+3inX0wY3TfO03kXxPBfIcFMkDIY+6lJP+YHgyYuMoT56UoD1Iiaj3fP3YxH1aKJCvowStAPcBcyt9vlnZfbVYJqk/XqTp9NzI+hNVppuk0ht03b1VGIEEN7/hy17514JK72PLrGM7Be1GT9q/qCaO3OG8V3lsNnRQNQragHYLGul9TLGOoMzm5A0idvB1vpyTPjXVmVynoPKCtlMk/cSYQFg21k+0cwYnfUzQ/rsPLVLWbrF7lKjnTyJ5nw7kuTOS57zUvTE2TovYaHB6orSgjcooE9OPsSlW775I6lBBK4C+QGk3/5SQ4fRrOIbUM73oqch5nkIPKWnjRI+NYAR+vraiJ/2nLVHsb7Rd0HwbBkuFyfLYPNZjc7InXV2CNn0HCNq3IjYx9bRk2srXtvpTfLpqCyf9oTFxySyzrKCdF0n/FulNvSliDSm27jfQKbMZQVsvkjclaNtE8jYIGulN5rGtAI9n3p/HIzYmeMqtQ9Aw2o9tkg69Ux0taAWUPo3lfk9fgUEPwhC2Liak0vuj3nQKxuhqeaXnSHPp83Z8NFLuME96r2NDTe1sp6BN9KQ9qMn27O+x+YUnXS2CZmy1W9C+H7H5pts5Z9iLdQ67OWnHRtLemlleWUGLjUDq4uxOmc0I2kqxshL3pqygDeyBe3OHp9w6BG0gxbd+9GpBA5ReFvmV0lGJ4PCBQOctiTHqFuyLrA9Bm1SSvjBKwQj8gY4Wm+zqWxzsXl47BW2SJ+0BTbZnlE9gPOn6kqDFpuBepMyYdZa9mIfc/k7a2Jrb5ZnllRW0v7W4w37dU2YzgrZcrLzEvSkraD2xveAcT7kiaCWg9MHKiF1bu6NfqMCQO3ZdPDBQ7jc9aT9QToDhGtvZTkF73pP24Cbb80uPzb4+QksJmtc7LGIvFl3CFbSYh+MlmeWVFbSyMRvL8mJPmSJoXWyIhEMiaJ0L5Y+sXze/PhjUKRtTmm4wYmzWqxxlO9HWdgraBE/aYJzIzPJPyBGqPiZoW0ZswmW8lNcoxcNXuVOOsfWsGzLLKytoD7Sws0an3OC0lRCKThK0wS28NyBOTqiyD00ErV1Q+lDJVopZwYY9aUrHK3Q9K8ENW9TWdgra1Z60f1XNeTn6ov0/5EnXlwRt9YhNOHhkR0Qg7RQSCye1sZM+5mr9bGaZZQXtj5H0iI/4lukYQQi6sviS6fwKPmc6Yuz32pcCHpLUewQNv1/MU/BD696Arzn35wXr3kw09wb7x252f3unXBG0ToTSoa7+7Omg4JF3ZRN8xGNznKd8nKf2oidt0DOyyfa2U9B+40mLkXEpJwbLHs4tcoNCg+d60vYlQcP5W7EN0VnBhY2tlMfk0k76PSLpUafk6JDKC9r+kfQ4mmQ+6opEQub+FJzddIAFsXk56V1GvUTQTJ7YHrKTqHuklrmd+zOrdW9wEjQEMulGTiJonQmlI+u7+8CwhpXcrJmwu6ZqDKDrjcDPf7vF00HCuSR4LEkT9WqnoOEYG/dsIUy3BqPVJ8pex3OPMV27nidtnxE0Y/fhiF1Eokiez0R6Q+1VETvPunb432tRfETwa4qcRm06o+sj+cd78qwSSY9NzvlnQ33ja1f37zLXiKTpTYJ2VCTPUzkC5diD6CE2ZPAImQ4XtIb3f6oBd0R7ejonxObKPj49YBcjr0mezrthGM9/OzzQSQYPu2uiXqHIJD+oaK+MoM3MfNiTHqdFlw1BhZBhF3hsvcScw5O+rwlaLPIFRkq/SuSHmGETb2y60efdhk4oFtoJx7J4pzxJjwYujHX2AUFD5xk7rPISyo+MglEJpk0x+kScwl495WjyYNN4bI9d9BBaT91vMvm8BxqbdJ0saDvktrdPQfkj64NN7Y2y7J/tsd0QgZ//NpT5XqBzzpqOU9ot9FyTZ+VIOkzT+faDHV2xjWWj7e/hSY/wYvuVLBdBhX3nonnjbnaooCG0VM6mVxDehRtbdocwP06Iwy3MzUlPyfUz+RC4F6c9Y2QWG2lhs+7qgTbF9qKBz6OuzP4mPQISI0hwKsahV9CMjVMT+RCIGUFrG4SN9DTkFqS3HLgbeb0dL/UuQcNU4d8j+fDRcjLpIMj9nLyIzbko86fM+6j7Bw5E3xvggdoraDOYZyyUD2G3Gma3qORItdeBO6FFVaNDBjrJlWqyv6lq9GDEdN9cTrrQCdngeOUc2Onk7W/Kec7Kc6sKOFqYsp70lPNQKE+ijWUFDfHO3PBgBX+tEkeZm/bu47mvX5mPgsUC+TpR0MpyrGMbwYXrPjKk4Plu52eVi9iKOcfQYDrw7ZLljg+UuSQ1nhztI85yw7668YaTMurYEMSAepGgmXyjMu/v66SFC/cGQZ1jI18Qpwc0HGFFbRQ0kzc25Q5iXRHT31h/xaGwmD6/i1npROleAeXflIvOvqnpRss+4v65x6WgI/6xJy2OFgidWooozTjAE2eA4bgCHNeNjeA4RO5h5Y9gv2mkXr4To5HnIKXjUUJ0cJIqYpLtZMR2rYCtUoJm8uyoGo/oKfiEadeGSgcCXsK0Getvhys9HewTM6yd/SJSZl8UNEzh3V2j/YJYd/EefGmVHduP1gzHR8r8FeWf51aGDU5E1PsEDc4vD7bg3uB+N3hnU/sF7ZwKbUFZwXXBXg2lRyrPeTqmU2ouxyceDwbS+k7K9k3PxQ6VKxg8MJOv7R3J954RYRxnYDtceE+vrShoONXg0My2fpbZXky3BkeYfVHQjP0lKH40SlniEM2hqXtAepoqNeVZheMjZeKok1YI6fmesnqVoJm8Q2p+FkCMirf2lNVuQdu8Qlu+zHm2eyUCHRw68Fqj3Ct/bEeMMBYJpD9I+deGconOP+oQoPQ62ksl7d4bsFVa0Ky8RzfRTpsXq0TE6r4qaKYMiMt9NdhHxBBvhPNAudtT/EyrED+MXBufKBOj0itrup+o+8/IMw1FvVDQTH5MB/+rpvuDCC2rBcppt6DNyPxLhTZVcn7reCh/ZH2sPbXCVd63V+qwSHqI4KSSnTpEEu7/q2TWaSPV6PIeI0azDVOxzQiayf9tlT7xNUTc1y0zy+mzgmbKwehlv4qdGb7qR5NnIT0F0ictT8osB+t9Z5qyQmluyygTbvebNtFxY53tdxQ4b8uU0SsFzdiY09zj2EndMeK+HkjxQ1rbKmgmP7YXlJ1yPyLnHvY6mI74Q4vYH7Vni8o6xikLvCyRZ4jSa0notD+JdOqIzI+zd36sPO7qEftwe8fU48vKvyb1dafPvIO5jfJM6fHfTlLasaZo17vMn5W8P4OYvzC/ibtPzSXuBTa9I4K1d5QbKAMOQJhKnWwx2XkGbP3dsQNHH++JyaS97ybXxENTdTMdMdaaigV/n9PIFGPvIeaRpKctKwdNNR04hCrkxQjPuQmkY1DCQ+3wSIdzVYlyh5A+3BIOArFRHwivTYw4zmauQQnnANLeoG8FfgdE0ghGTCc9Yn49kPelRLlwwX83kDf7eSUt+sNIn3OGCCCptUd4f95L2ht1SKb9OwP1RP23yrAB4X0qYANClzxxhLQHLxyYYs5HmGp8hXk1M+gB3qvBHdBApQ/XLAgBaYlbJ0Y2TlngXOmcX+/dghPItsx9mWOU9gbEeTpwDFnQJzQl6jYXcxPmwUaccJ7b4cyRSh9tE902oHQczIWsds2vSu4ps2xNa2zAIWQv087jTZtHmXpiI3yD11WmfTi7DLZYaTSu9BYJ207wtyS9Z2ZwDZyfPN5mkXKxz2xe0puSNyO9URaCsoXp0OdPdeplQdo9Hh3y3qRFawzpwy5XJutrn///+EjnU/p8PNKjhUVIb0dA2aNN2fBy24u5CWkvyVLOXqRFzfdbDEjkw72fp2LeaU0n7cub/cHq2MQzCJf9rUmP4scY4my7XZjDSZ9NVuqjhtPPFqjn19tEMmwMCNgo5bxhnnVsFdnXtO1w09atSB/nM2cZewKBQJAF80UdEjTvqRQCgUAgEHQcSE+HhgSt9ug4AoFAIBDUDtJRLT4KiBnWOmoJaiAQCAQCQUvBgvXzyOgM3patP55eIBAIBIJmQNrV/t8RQbuu3XUUCAQCwVQIFqAfkD4I8hjjzTiCtAclPOrgyr+y+dsvTLqU63hDSDiBQCAQCFoOFqDLEgJVhogWH40fKRAIBAJBS0DpiOe5RLzAEe1uj0AgEAimQpAOtZWKzpFDRBFJhkkSCAQCgaAlYBFasAYxe590VIfKkW4EAoFAIGgKpKOdn8h8jOInX/uI4LcnMRdodzsEAoFAIPgaLEwLwUOR9KGLCMb8OPMfpIP44v/vYf6ReRRzWLvrKxAIBAJBNswaW+UI/gKBQCAQCAQCgUAgEAgEAoFA0EtAw/aYtd11EAgEAoGgKbCYrWgcVXC45Xztro9AIBAIBKVB+hTp+8zWAXhhLtvuOgkEAoFAUBosYKONmD3HHNru+ggEfR7G3XkB5sLMWZqwM6+xIQFfBVM9EI2EuTjpUwDmaHFZA5iD8C43YaO/2d8H9q+hToNMfzCo1ZFZ2P4M6LtIH+YqUWB6Anyj72W+6eHrpI+I3xc/TMLGsIANlxsk7OBlW5R5LXWPjzeF+RBzR+a0GW0aSPooj9ctG1+ayAy7MqfPsIGQRi+Yet/ty8N/O89cR7oFI7a2s+7BEYE0RVnPJ+p1S2ErcP10q6ylUu1MIfB8vEE6Msbx+GDItHOUlX+7SLpo/flve1nXDwjYOCDzeQz+bqQj6BfpVo7Ud3Mr3V4598LKi47uAZP3mUi6WzLbc3ogP2XmL1X/QFkQoJ2Zr1jvHuJUPsjcmDL25Jl+YE3Sm9M/sezghO9bmauWrNMcpPsxu07gW8yjKSHs1v25pWS5T5pyPmWuUCKf/YxvXrJMu9+K0fvu9Hpww56mdIgeCEzw64ivDc+wAW4SsTEN82fmZscCuJ7BnDFiB+dQPROxAWG7iTkkcV/wFWeL6q89aa4015Bu4YitkZadj8kTJcIq671EvSYUtgLXx1llLRezlYOM5wOnK0NAol/hfP1UK8/ISLpo/U1ZxfUxARtjMp/H4O/Gf7/BSrd6pL7bWOlKdRKkv97/afJ6P1BMugmZ7RkXyD8wM39TnRxpITrRvKc++zhN4EyKjFb42vTMg5kfROqJw1EPpIwRG+nRKD6Gp0Ts4cieZSI2inQTStyLNZwyzyiR137Gt8nNZ/K6/VaIY8rY7TWwOizchMtMh3IR6dGZ/YMEDx2k7oL2mLHh44oRG/h6+9Syo0h/PY02D2Tx9yMpMErjvw9lTrbS4qU42bwgOFjRjrWHMEQxYXQfjM/ch4uqCRo4iZzRB3W+oH1u/Y7XU/cTl3Fg5T4JOz0paLjf4y0qK88j1t/xTHhHmNRZgvY7q873WOVNdtp5cCC/LWgvR97Ppo6uMe/Mf0w5CLgM0cFH6nWk+xK8Q2snbBzqvCsY5RzGPIL0DEvxd7zL+ydsYWT6gJUH/cu5pPuDS6mrv3meIp6eVv4sQSP9cX6u0w6UtVBm/roELfZbb1nGbq+B1WHhpZ/T+ns/58beGbFhC9qYCnXANMX9lo0LyFo3Mw8IhuEXM2eK2Pmz03EtYF1DezA1+q65jhdsh4gt35cOptoWt9JUFTTwNrIElTpf0D50/j4b6WndoqzXEp3C3KSnaJE2OI2Sqj9lCJonz1grT1CcnDwdI2iePEV54zPz2IJ2Q5k6lgHb3sAq53jn2qrM3TPqWXwo4QMKgji9dX1W0sGcizKwpDAoYu9YJ+2KzvWlmTdSwjHGspEraNgS8Z71XhQDg8My89claC37rTsWFBA0c22odWOfjNhoVtDWpq5j6fEVVnrxF50pdY3A0JaBgXQ7WXWFy7J3+sN5MOwpFLg7z2LSVBE029bRRfnUywTNun6tVd6xgTRYgN+P9McE1i2CDjqp+pMIWicL2tpWOa+Yd22eEvn3tfJfGHk3b7bS7RpIgw/YN0warL1t1US7ygramdT10fxt0lOaxYgp6SBDImjVQeER2nTOjb0qYsMWtEnUfRqk4EaR/AdZ+c+q2I4NM+s6J3WJJx447xee82Bgmudv5v8hmqPNC1NF0C6w7OIrbluTprcK2k7U9SFxTyDNKqTX2uBck3IMEkFL52lG0N4OvJ97l6l7oBxM8b1olYX3bCLpEwZ2JueD2cnbz/ntt46k/amVLuQIM5+VBs9wM57S2YJm+peJJv1Dpl3HWTbWz7BRl6C9E/its0aKvRJWhwVvor9YjcZa2GfWtdUiNmxBC3FkJP8ZVrpDKrbjh5aNUxJp37HSLh1I0+1Lh7k8dX3xoQPfhaoJGtYU9rRsY9SyFPVeQVvPqvtTgTTTkp5yzPFwE0FL52lG0EI8tUzdI2WtS3oW4wtPGWirt0Mn/QF9nZV2zUgZ9sfruECaZa00dzfZpjKCBk/sYopxV6suxTvyJ4osm5j0rXYKubSMzV4FSnuxofPeN2HDHaHd5WFshHaYlX9sxXZsbNm4OpJuFuruHBKammwYuvN/N6Eukf+AuqItlBU0rAmeYndMpKdFcgTtQStfg3MMaYeer8xLFfTcygWlBW17637eW0N5F1jta1jbIL2gX1zPXZMQQevK807g/Wx6hGaVhzXx7zCvIL2GZPcnGMHNFch3sZUuOEVI+sy5It1pgTQLWGnwDEdFJNGeLEEj/eF2m5UeH+pYVsBa81vmb1hyWCdhpy5BezvwW081I7R7TYMLl9kvc15San4NbXXqEgq8AN7pAYrMP5MO51N8FeKlXTyQbvecB5T8gobpgxOcF7S0oJm/wanC546dErQbrbQNgkVdIovF9ejWhBxQWtBusepTaXTt2Dsx1qlRd++xPTJtiqB15Wnpugo5o3DTya9DXetI4BqBvHtbaeDgFfJmvtNKt30gDd7VwrsVHoZeL+1QGU6aXEHDnsSPrPQhXpSwI2toVUGeNTTSU2KFwGCabbaEjWYFDdMNtpfjlXaZ5jpGNvBcHByx8yfLxiSyRIb0qGgt6vKiglhvEbHlfTBIb4Z1hai0oJm/D6XuLuU5gvZbK+04+4UkvQBdTHc8S4kN8TmgsJcjNquebNUFTgADaijPnjqGOM9qXcOm+8ItHC7rueIkgtYDgkZavODMcQk5m5X532dZdfhmID/W4ApBwHOMLTq2J/AszjP3EnPuSH1+a70PWK9eybm+iHm+8X7G9sblCtr1Vt/ynnlGbRbbBLDMEOvHRNCqgvyChpAt9vDfu/Bq2bAFDfauDHB4xMaG1H3uFy86jrI/g7rPyd8eeoj57ytQ1zrXfzsJ83JhDxRGEvZmTXwBBjv82IPB/17CvEzNChq+Ijel7p6PKUFbzaoXXhyse2Kf0tXUfQ/eb2J2cmE9H7j/Nxje7rQfo/uRNZWHxfxXLdsQZozKLqDu4o/nKfl1bWz2lKA9Y90jm941XWqPoL0aeT93zLEXKWdX61l+wfxu2D+G7RrFhyTeyWB0Gb52CHXf//oEaa9BCOJT1jWUs1uiPpi1udt+t5hXkRbFa0hPyeHv+EgKOitZ+WMzOpjiLATrdvPvwQ7H+PoBjy1b0B4NPFPe2RDq3m/FfuufxO5drwWFvRzxgxTigM5s3YgNW9BiHBmxgc79x9R9w65LjBrh4RTsyEiPel5I1AMPdXQ0QYkvHeq+56aSoFnX7fW0lKDhPh1O8cgH2BRfS5w+Sq+xTjbtSzp8lChzBOmIKqEy8ftmT6dSzwlaiN6OkDrLKQQ8Pm0tWg7c9t3wUjan+J5/xwZGeaOoa4Yo1A/sEOsHLHsQkscS7b4j1h+kfkeTxvYDCE2DIq5s8WH+MAVC8FF3QQvxykBeu9+KsZKvQseD9EgFndZd5Ewt8r93M9dArN149w+RXgN7OoPJ3emkPf7GmRej6LSLkda3M9uEr3x0+n+zHiBELsDXGryQcrztBpuHDvU+O5DmBHMd6WJTCFta96DhYSe9YfQOc/2BjLrhpUenjy/B4gMALzmiKmALxMwpG7mwng+bfzPPA7YvtOQsLdIbca8xvz2egyIWJ+75oiVtHWbVffnMPGfn5CE9s5B67i8P5J3J3EekyXKoMXkKu+My88yd+X5GI29kloVR0c9Jb3V53zyb/zb/zo5LyGm/RdqppBit4xmAQ8n5FIk4FLA1t6nTo1Z/gA8mRBHBqDIqjNb9uSKSpnhPMJtEkXQXmnQ4i87rhUzagzr1W50cyGv3WzH2SceQ/wfmLIckBs4sVAAAAABJRU5ErkJggg==" alt="Action Logement" class="al-logo-img">
+        </div>
+        <div class="al-header-title-box">
+          <div class="al-header-title">
+            <span>Simulateur d'équilibres financiers d'opérations</span>
+            <span class="badge-eureka">EUREKA 2026</span>
+          </div>
+          <div class="al-header-sub">Direction des Financements Bailleurs et Collectivités (DFBC) · Direction Process Outils et Méthodes (DPOM)</div>
+        </div>
+      </div>
+
+      <div class="al-header-right">
+        <div class="status-chip" title="Module interactif connecté et prêt pour la simulation">
+          <span class="status-chip-dot"></span>
+          <span>Simulation Active</span>
+        </div>
+        <div class="user-pill" title="Chargé d'opérations référent">
+          <span class="user-avatar">AD</span>
+          <span>Alioune DIENE</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ONGLETS -->
+  <div class="al-nav-bar">
+    <div class="al-nav-tabs">
+      <button type="button" class="nav-pill-btn active" id="tab-btn-admin">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Données administratives
+      </button>
+
+      <button type="button" class="nav-pill-btn" onclick="ouvrirMessageOnglet('Gestion locative')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Gestion locative
+      </button>
+
+      <button type="button" class="nav-pill-btn" onclick="ouvrirMessageOnglet('Plan de financement')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Plan de financement
+      </button>
+
+      <button type="button" class="nav-pill-btn" onclick="ouvrirMessageOnglet('Résultats')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Résultats
+      </button>
+
+      <button type="button" class="nav-pill-btn" onclick="ouvrirMessageOnglet('CR-AF-TRESO')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        CR-AF-TRESO
+      </button>
+
+      <button type="button" class="nav-pill-btn" onclick="ouvrirMessageOnglet('Hypothèses d'index. & exploit.')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Hypothèses d'index. & exploit.
+      </button>
+    </div>
+  </div>
+
+  <main class="main-wrap">
+
+    <!-- COMMAND BAR DOSSIER -->
+    <div class="op-banner-card">
+      <div class="op-banner-inner">
+        <div class="op-fields-row">
+          <div class="op-field-group">
+            <span class="op-field-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+              N° Simulation
+            </span>
+            <input type="text" id="top-sim-id" class="op-input-styled" style="width:170px" value="SIM-20261021-AL01">
+          </div>
+
+          <div class="op-field-group">
+            <span class="op-field-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Date du dossier
+            </span>
+            <input type="date" id="top-date-dossier" class="op-input-styled" value="2026-10-21">
+          </div>
+
+          <div class="op-field-group" style="flex:1;min-width:280px">
+            <span class="op-field-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              Nom de l'opération
+            </span>
+            <input type="text" id="top-op-name" class="op-input-styled" value="ALS - exemple">
+          </div>
+
+          <div class="op-field-group" style="min-width:210px">
+            <span class="op-field-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Responsable de Programme
+            </span>
+            <input type="text" id="top-resp-name" class="op-input-styled" value="Alioune DIENE" oninput="syncRespName(this.value)">
+          </div>
+        </div>
+
+        <div class="op-actions-group">
+          <button type="button" class="btn-al-action btn-al-red" onclick="enregistrerSaisie()" title="Sauvegarder les saisies">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Enregistrer
+          </button>
+          <button type="button" class="btn-al-action btn-al-red" onclick="passerEtapeSuivante('Gestion locative')" title="Valider et continuer vers l'onglet Gestion locative">
+            <span>Étape suivante : Gestion locative</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button type="button" class="btn-al-action btn-al-outline" onclick="ouvrirMessageOnglet('Historique')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Historique ( 1 )
+          </button>
+          <button type="button" class="btn-al-action btn-al-outline" onclick="reinitialiserDossier()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nouveau
+          </button>
+          <button type="button" class="btn-al-action btn-al-outline" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYNTHÈSE KPI DYNAMIQUE -->
+    <div class="kpi-quick-bar">
+      <div class="kpi-tile">
+        <div class="kpi-tile-icon" style="color:var(--al-red)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="kpi-tile-content">
+          <span class="kpi-tile-label">Total Logements Opération</span>
+          <div class="kpi-tile-value" id="kpi-lots-val">
+            0 <span style="font-size:12px;font-weight:600;color:var(--al-text-muted)">lots</span>
+          </div>
+          <span class="kpi-tile-sub" id="kpi-phase-sub">Calculé dynamiquement sur les phases</span>
+        </div>
+      </div>
+
+      <div class="kpi-tile">
+        <div class="kpi-tile-icon" style="color:var(--al-text-heading)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <div class="kpi-tile-content">
+          <span class="kpi-tile-label">Surfaces Globales Opération</span>
+          <div class="kpi-tile-value" id="kpi-sdp-val">
+            0 <span style="font-size:12px;font-weight:600;color:var(--al-text-muted)">m² SDP</span>
+          </div>
+          <span class="kpi-tile-sub" id="kpi-shab-sub">SHAB totale : 0 m²</span>
+        </div>
+      </div>
+
+      <div class="kpi-tile">
+        <div class="kpi-tile-icon" style="color:var(--al-success)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        </div>
+        <div class="kpi-tile-content">
+          <span class="kpi-tile-label">Efficacité Globale SHAB/SDP</span>
+          <div class="kpi-tile-value" id="kpi-ratio-val" style="color:var(--al-success)">
+            - %
+          </div>
+          <span class="kpi-tile-sub" id="kpi-ratio-sub">Objectif de référence ALS : ≥ 80%</span>
+        </div>
+      </div>
+
+      <div class="kpi-tile">
+        <div class="kpi-tile-icon" style="color:var(--al-red)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="kpi-tile-content">
+          <span class="kpi-tile-label">1ère Date MES Opération</span>
+          <div class="kpi-tile-value" id="kpi-livraison-val">
+            01/03/2022
+          </div>
+          <span class="kpi-tile-sub" id="kpi-mes-origin" style="color:var(--al-text-heading);font-weight:700">Phase 4 (VEFA) · Jalon le plus précoce (=MIN Excel)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SÉLECTEUR DE PHASES ENTIÈREMENT DYNAMIQUE -->
+    <div class="phase-bar-card">
+      <div class="phase-pills-wrap" id="phase-pills-container">
+        <!-- Rendu dynamique JS -->
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <button type="button" class="btn-add-phase" onclick="ajouterNouvellePhase()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter une phase
+        </button>
+
+        <div class="phase-total-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--al-red)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+          <span>Opération globale : <strong id="global-total-logements-txt">208 logements au total</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE DE SAISIE DE LA PHASE ACTIVE -->
+    <div class="grid-3-cards">
+
+      <!-- CARTE 1 : IDENTIFICATION & CADRE JURIDIQUE -->
+      <div class="al-card">
+        <div class="al-card-header">
+          <div class="al-card-title">
+            <div class="card-title-icon" style="color:var(--al-red)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            Identification & Cadre Juridique
+          </div>
+          <span class="card-badge-status" id="badge-phase-ident">Sous-ensemble 1</span>
+        </div>
+        <div class="al-card-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="nom_phase_input">
+                <span class="label-left">
+                  Nom de la phase
+                  <span class="info-tip">ⓘ<span class="tip-box">Dénomination opérationnelle de la phase selon la grille EUREKA (Démolition, Construction Neuve, Réhabilitation, VEFA).</span></span>
+                </span>
+              </label>
+              <input type="text" id="nom_phase_input" class="form-control" oninput="onCurrentPhaseFieldChange('nom_phase', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="nb_lots_input">
+                <span class="label-left">
+                  Nombre de lots
+                  <span class="info-tip">ⓘ<span class="tip-box">Nombre de logements financés dans cette phase. Répercuté en temps réel sur le total consolidé de l'opération.</span></span>
+                </span>
+              </label>
+              <input type="number" id="nb_lots_input" class="form-control form-control-num" min="0" oninput="onCurrentPhaseFieldChange('lots', parseInt(this.value)||0)">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="stade_select">
+                <span class="label-left">
+                  Stade opérationnel
+                  <span class="info-tip">ⓘ<span class="tip-box">Jalon décisionnel dans le référentiel DPOM : Développement, Comité d'Engagement (CVP/DAPS), Pré-OS ou Marché.</span></span>
+                </span>
+              </label>
+              <select id="stade_select" class="form-control" onchange="onCurrentPhaseFieldChange('stade', this.value)">
+                <option value="Développement">Développement</option>
+                <option value="CVP">CVP (Comité de Validation Préalable)</option>
+                <option value="DAPS">DAPS (Dossier d'Accord Préalable)</option>
+                <option value="Avenant CVP">Avenant CVP</option>
+                <option value="Avenant DAPS">Avenant DAPS</option>
+                <option value="Pré-OS">Pré-OS</option>
+                <option value="Avevant Pré-OS">Avenant Pré-OS</option>
+                <option value="Marché">Marché de travaux</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="date_coe_input">
+                <span class="label-left">
+                  Dernier passage en COE
+                  <span class="info-tip">ⓘ<span class="tip-box">Date d'examen en Commission des Opérations d'Entreprise / Comité d'Engagement Action Logement.</span></span>
+                </span>
+              </label>
+              <input type="date" id="date_coe_input" class="form-control" oninput="onCurrentPhaseFieldChange('date_coe', this.value)">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="regime_select">
+                <span class="label-left">
+                  Régime juridique
+                  <span class="info-tip">ⓘ<span class="tip-box">Cadre réglementaire d'exploitation : Résidence Sociale (RS), Foyer, Pension de Famille (PF), Hébergement.</span></span>
+                </span>
+              </label>
+              <select id="regime_select" class="form-control" onchange="onCurrentPhaseFieldChange('regime', this.value)">
+                <option value="RS">RS (Résidence Sociale)</option>
+                <option value="Foyer">Foyer de travailleurs</option>
+                <option value="PF">PF (Pension de Famille)</option>
+                <option value="Hébergement">Hébergement temporaire</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="code_patrimoine">
+                <span class="label-left">
+                  Code patrimoine bailleur
+                  <span class="info-tip">ⓘ<span class="tip-box">Identifiant d'inventaire du programme dans le système d'information patrimonial du bailleur.</span></span>
+                </span>
+              </label>
+              <input type="text" id="code_patrimoine" class="form-control" oninput="onCurrentPhaseFieldChange('code_pat', this.value)">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="code_sap">
+                <span class="label-left">
+                  Code projet SAP
+                  <span class="info-tip">ⓘ<span class="tip-box">Identifiant comptable SAP pour le suivi des engagements, subventions et prêts accordés par Action Logement.</span></span>
+                </span>
+              </label>
+              <input type="text" id="code_sap" class="form-control" oninput="onCurrentPhaseFieldChange('code_sap', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="resp_prog_card">
+                <span class="label-left">
+                  Responsable de programme
+                  <span class="info-tip">ⓘ<span class="tip-box">Chargé(e) d'opérations référent(e) assurant la conduite du dossier.</span></span>
+                </span>
+              </label>
+              <input type="text" id="resp_prog_card" class="form-control" oninput="onCurrentPhaseFieldChange('resp_prog', this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTE 2 : LOCALISATION, MARCHÉ & PÉRIMÈTRES RÉGLEMENTAIRES -->
+      <div class="al-card">
+        <div class="al-card-header">
+          <div class="al-card-title">
+            <div class="card-title-icon" style="color:var(--al-text-heading)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            Localisation & Périmètres Réglementaires
+          </div>
+          <span class="card-badge-status" id="badge-zone-loyer">Zone II</span>
+        </div>
+        <div class="al-card-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="zone_loyers_select">
+                <span class="label-left">
+                  Zone de loyers réglementaire
+                  <span class="info-tip">ⓘ<span class="tip-box">Zonage national (Zone I, Ibis, II ou III) définissant les barèmes et plafonds maximaux de redevance locative conventionnée.</span></span>
+                </span>
+              </label>
+              <select id="zone_loyers_select" class="form-control" onchange="onZoneLoyersChange(this.value)">
+                <option value="I">Zone I</option>
+                <option value="Ibis">Zone Ibis</option>
+                <option value="II">Zone II</option>
+                <option value="III">Zone III</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="type_op_select">
+                <span class="label-left">
+                  Type d'opération immobilière
+                  <span class="info-tip">ⓘ<span class="tip-box">Typologie technique : DR-CN (Démolition / Reconstitution Neuve), DR-DM (Démolition), RH (Réhabilitation), VEFA.</span></span>
+                </span>
+              </label>
+              <select id="type_op_select" class="form-control" onchange="onCurrentPhaseFieldChange('type_op', this.value)">
+                <option value="DR - CN">DR - CN (Démolition / Reconstitution Neuve)</option>
+                <option value="DR - DM">DR - DM (Démolition Reconstitution)</option>
+                <option value="CN">CN (Construction Neuve)</option>
+                <option value="VEFA">VEFA (Vente en l'État Futur d'Achèvement)</option>
+                <option value="RH lourde">RH lourde (Réhabilitation lourde)</option>
+                <option value="RH">RH (Réhabilitation standard)</option>
+                <option value="EKO">EKO</option>
+                <option value="AA">AA</option>
+                <option value="PEG">PEG</option>
+                <option value="DM">DM (Démolition seule)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="departement_select">
+                <span class="label-left">
+                  Département d'implantation
+                  <span class="info-tip">ⓘ<span class="tip-box">Département administratif permettant l'indexation territoriale et la détection de la Direction Régionale compétente.</span></span>
+                </span>
+              </label>
+              <select id="departement_select" class="form-control" onchange="onDepartementSelectChange(this.value)">
+                <!-- Rempli dynamiquement -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="code_insee_input">
+                <span class="label-left">
+                  Code INSEE commune
+                  <span class="info-tip">ⓘ<span class="tip-box">Code officiel géographique INSEE (5 chiffres) déterminant automatiquement la Direction Régionale et le statut Cœur de Ville.</span></span>
+                </span>
+              </label>
+              <input type="text" id="code_insee_input" class="form-control" placeholder="ex: 75056, 69123..." oninput="onInseeInputChange(this.value)">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-left">
+                  Programme Action Cœur de Ville (ACV)
+                  <span class="info-tip">ⓘ<span class="tip-box">Programme national de revitalisation des centres-villes des villes moyennes, ouvrant droit à des subventions et prêts bonifiés spécifiques Action Logement.</span></span>
+                </span>
+              </label>
+              <input type="text" id="cdv_status_input" class="form-control form-control-calc" readonly value="Non éligible Cœur de Ville">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <span class="label-left">
+                  Direction Régionale Action Logement
+                  <span class="info-tip">ⓘ<span class="tip-box">Délégation régionale Action Logement Services (DE) assurant l'instruction financière du dossier et le comité territorial.</span></span>
+                </span>
+              </label>
+              <input type="text" id="dr_status_input" class="form-control form-control-calc" readonly value="Direction Régionale Île-de-France (DE 01)">
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label class="form-label" for="marche_select">
+                <span class="label-left">
+                  Marché de travaux
+                  <span class="info-tip">ⓘ<span class="tip-box">Mode de dévolution contractuelle des travaux : Entreprise Générale, Conception-Réalisation ou Corps d'États Séparés.</span></span>
+                </span>
+              </label>
+              <select id="marche_select" class="form-control" onchange="onCurrentPhaseFieldChange('marche', this.value)">
+                <option value="Conception Réalisation">Conception Réalisation</option>
+                <option value="Entreprise Générale">Entreprise Générale</option>
+                <option value="Corps d'états séparés">Corps d'états séparés</option>
+                <option value="Autre">Autre modalité</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="dian_select">
+                <span class="label-left">
+                  Dispositif DIAN
+                  <span class="info-tip">ⓘ<span class="tip-box">Dispositif d'Intervention pour l'Attractivité Nationale facilitant l'accès au logement des salariés des entreprises cotisantes.</span></span>
+                </span>
+              </label>
+              <select id="dian_select" class="form-control" onchange="onCurrentPhaseFieldChange('dian', this.value)">
+                <option value="Non">Non éligible DIAN</option>
+                <option value="Oui">Éligible DIAN</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="anru_select">
+                <span class="label-left">
+                  Périmètre ANRU
+                  <span class="info-tip">ⓘ<span class="tip-box">Opération située en Quartier Prioritaire de la Ville (QPV) ou convention NPNRU, permettant des bonifications financières.</span></span>
+                </span>
+              </label>
+              <select id="anru_select" class="form-control" onchange="onCurrentPhaseFieldChange('anru', this.value)">
+                <option value="Non">Hors zone ANRU</option>
+                <option value="Oui">En zone ANRU (NPNRU)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTE 3 : SURFACES, TFPB & JAUGE D'EFFICACITÉ -->
+      <div class="al-card">
+        <div class="al-card-header">
+          <div class="al-card-title">
+            <div class="card-title-icon" style="color:var(--al-text-heading)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            Caractéristiques Physiques & Surfaces
+          </div>
+          <span class="card-badge-status">Surfaces utiles (m²)</span>
+        </div>
+        <div class="al-card-body">
+          <div class="form-group">
+            <label class="form-label" for="surf_sdp_input">
+              <span class="label-left">
+                Surface de plancher construite (SDP)
+                <span class="info-tip">ⓘ<span class="tip-box">Surface de plancher totale au sens du Code de l'urbanisme. Dénominateur de référence pour l'évaluation de l'efficience spatiale.</span></span>
+              </span>
+              <span class="label-hint">m²</span>
+            </label>
+            <input type="number" id="surf_sdp_input" class="form-control form-control-num" min="0" oninput="onCurrentPhaseFieldChange('sdp', parseFloat(this.value)||0)">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="surf_shab_input">
+              <span class="label-left">
+                Surface habitable totale (SHAB)
+                <span class="info-tip">ⓘ<span class="tip-box">Surface privative conventionnée des logements. Assiette de base pour le calcul des plafonds de loyer et des redevances.</span></span>
+              </span>
+              <span class="label-hint">m²</span>
+            </label>
+            <input type="number" id="surf_shab_input" class="form-control form-control-num" min="0" oninput="onCurrentPhaseFieldChange('shab', parseFloat(this.value)||0)">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="surf_communes_input">
+                <span class="label-left">
+                  Parties communes
+                  <span class="info-tip">ⓘ<span class="tip-box">Locaux techniques, circulations, halls et espaces collectifs spécifiques aux résidences sociales et foyers.</span></span>
+                </span>
+                <span class="label-hint">m²</span>
+              </label>
+              <input type="number" id="surf_communes_input" class="form-control form-control-num" min="0" oninput="onCurrentPhaseFieldChange('communes', parseFloat(this.value)||0)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="tfpb_duree_input">
+                <span class="label-left">
+                  Exonération de TFPB
+                  <span class="info-tip">ⓘ<span class="tip-box">Durée légale d'exonération de la Taxe Foncière sur les Propriétés Bâties (15 ans standard, 20 à 25 ans sous label environnemental / conventionnement).</span></span>
+                </span>
+                <span class="label-hint">Années</span>
+              </label>
+              <input type="number" id="tfpb_duree_input" class="form-control form-control-num" min="0" oninput="onCurrentPhaseFieldChange('tfpb', parseInt(this.value)||0)">
+            </div>
+          </div>
+
+          <!-- Jauge visuelle de ratio -->
+          <div class="ratio-panel">
+            <div class="ratio-header">
+              <span style="font-weight:700;color:var(--al-text-heading);display:flex;align-items:center;gap:6px">
+                Ratio d'efficacité SHAB / SDP
+                <span class="info-tip">ⓘ<span class="tip-box">Indicateur d'optimisation architecturale. Un ratio supérieur à 80% témoigne d'une excellente efficience des surfaces.</span></span>
+              </span>
+              <strong id="ratio-txt" style="color:var(--al-success);font-family:'JetBrains Mono'">- %</strong>
+            </div>
+            <div class="ratio-track">
+              <div class="ratio-bar" id="gauge-bar" style="width: 0%;"></div>
+            </div>
+            <div class="ratio-legend">
+              <span>Seuil standard : 75%</span>
+              <span style="font-weight:700;color:var(--al-success)">Objectif de référence ALS : ≥ 80%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CARTE 4 : CALENDRIER OPÉRATIONNEL & JALONS CLÉS -->
+    <div class="calendar-card">
+      <div class="al-card-header">
+        <div class="al-card-title">
+          <div class="card-title-icon" style="color:var(--al-text-heading)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          Calendrier Opérationnel & Jalons Décisionnels
+        </div>
+        <span class="card-badge-status" style="font-family:'JetBrains Mono'">
+          Date MES phase active : <strong id="mes-phase-txt" style="color:var(--al-red)">01/01/2024</strong>
+        </span>
+      </div>
+      <div class="al-card-body" style="padding:22px 20px">
+        <div class="calendar-grid-4">
+          <!-- 1. DÉPÔT PC -->
+          <div class="milestone-box">
+            <div class="milestone-badge">
+              <span class="milestone-badge-step">1</span>
+              Dépôt du PC
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="date_pc_depot">
+                <span class="label-left">
+                  Date officielle de dépôt
+                  <span class="info-tip">ⓘ<span class="tip-box">Dépôt formel de la demande de Permis de Construire auprès de l'autorité compétente.</span></span>
+                </span>
+              </label>
+              <input type="date" id="date_pc_depot" class="form-control" oninput="onCurrentPhaseFieldChange('date_pc_depot', this.value)">
+            </div>
+          </div>
+
+          <!-- 2. OBTENTION PC -->
+          <div class="milestone-box">
+            <div class="milestone-badge">
+              <span class="milestone-badge-step">2</span>
+              Obtention du PC
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="date_pc_obtention">
+                <span class="label-left">
+                  Purge complète des recours
+                  <span class="info-tip">ⓘ<span class="tip-box">Arrêté d'octroi du permis purgé des recours des tiers et du retrait préfectoral.</span></span>
+                </span>
+              </label>
+              <input type="date" id="date_pc_obtention" class="form-control" oninput="onCurrentPhaseFieldChange('date_pc_obtention', this.value)">
+            </div>
+          </div>
+
+          <!-- 3. ORDRE DE SERVICE -->
+          <div class="milestone-box">
+            <div class="milestone-badge">
+              <span class="milestone-badge-step">3</span>
+              Ordre de Service (OS)
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="date_ordre_service">
+                <span class="label-left">
+                  Lancement des travaux
+                  <span class="info-tip">ⓘ<span class="tip-box">Ordre de service officiel notifiant aux entreprises adjudicataires le début des travaux de chantier.</span></span>
+                </span>
+              </label>
+              <input type="date" id="date_ordre_service" class="form-control" oninput="onCurrentPhaseFieldChange('date_ordre_service', this.value)">
+            </div>
+          </div>
+
+          <!-- 4. MISE EN SERVICE (MES) -->
+          <div class="milestone-box highlight">
+            <div class="milestone-badge" style="color:var(--al-red)">
+              <span class="milestone-badge-step">4</span>
+              Mise en Service (MES)
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="date_mes_input" style="color:var(--al-red);font-weight:800">
+                <span class="label-left">
+                  Date MES effective
+                  <span class="info-tip">ⓘ<span class="tip-box">Livraison opérationnelle et mise en gestion locative avec emménagement des premiers résidents.</span></span>
+                </span>
+              </label>
+              <input type="date" id="date_mes_input" class="form-control" style="border-color:var(--al-red);font-weight:700" oninput="onCurrentPhaseFieldChange('date_mes', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <!-- LIGNE SECONDAIRE DES AUTRES JALONS -->
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:18px;margin-top:14px">
+          <div class="form-group">
+            <label class="form-label" for="date_ao">
+              <span class="label-left">
+                Consultation entreprises (AO)
+                <span class="info-tip">ⓘ<span class="tip-box">Lancement des avis d'appels publics à la concurrence et mise à disposition des DCE.</span></span>
+              </span>
+            </label>
+            <input type="date" id="date_ao" class="form-control" oninput="onCurrentPhaseFieldChange('date_ao', this.value)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="date_dossier_fin">
+              <span class="label-left">
+                Dossier de financement ALS
+                <span class="info-tip">ⓘ<span class="tip-box">Dépôt officiel du dossier d'instruction financière auprès de la Direction Régionale Action Logement Services.</span></span>
+              </span>
+            </label>
+            <input type="date" id="date_dossier_fin" class="form-control" oninput="onCurrentPhaseFieldChange('date_dossier_fin', this.value)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="date_livraison_input">
+              <span class="label-left">
+                Date de livraison prévue
+                <span class="info-tip">ⓘ<span class="tip-box">Date prévisionnelle de réception de l'ouvrage sans réserves avec le maître d'ouvrage.</span></span>
+              </span>
+            </label>
+            <input type="date" id="date_livraison_input" class="form-control" oninput="onCurrentPhaseFieldChange('date_livraison', this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- BANDEAU DE VALIDATION ET PASSAGE À L'ÉTAPE SUIVANTE -->
+    <div class="bottom-actions-ribbon">
+      <div class="bottom-ribbon-info">
+        <div class="ribbon-check-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div style="font-weight:800;color:var(--al-text-heading);font-size:14px">Étape 1 complétée · Données administratives validées</div>
+          <div style="font-size:12px;color:var(--al-text-muted)">Les paramètres de zonage, surfaces et jalons sont prêts pour le calcul locatif.</div>
+        </div>
+      </div>
+      <div class="bottom-ribbon-btns">
+        <button type="button" class="btn-al-action btn-al-outline" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer la fiche
+        </button>
+        <button type="button" class="btn-al-action btn-al-red btn-al-next-cta" onclick="passerEtapeSuivante('Gestion locative')">
+          <span>Passer à l'Étape suivante : Gestion locative</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      Action Logement Services · Direction des Financements Bailleurs et Collectivités (DFBC) · Direction Process Outils et Méthodes (DPOM)<br>
+      <strong>Simulateur d'Équilibres Financiers d'Opérations EUREKA 2026</strong> · Outil d'instruction professionnelle et de modélisation financière
+    </footer>
+  </main>
+
+  <div class="toast-msg" id="saveToast">
+    <div class="toast-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <span id="toastText">Modifications enregistrées en temps réel.</span>
+  </div>
+
+  <script>
+    // 1. DATASETS CHARGÉS DEPUIS EXCEL
+    const CP_LIST = [{"code": "01", "nom": "Ain", "de": "4 - AURA"}, {"code": "02", "nom": "Aisne", "de": "3 - Est"}, {"code": "03", "nom": "Allier", "de": "4 - AURA"}, {"code": "04", "nom": "Alpes-de-Hte-Provence", "de": "5 - Méditerranée"}, {"code": "05", "nom": "Hautes-Alpes", "de": "5 - Méditerranée"}, {"code": "06", "nom": "Alpes-Maritimes", "de": "5 - Méditerranée"}, {"code": "07", "nom": "Ardèche", "de": "4 - AURA"}, {"code": "08", "nom": "Ardennes", "de": "3 - Est"}, {"code": "09", "nom": "Ariège", "de": "6 - NA"}, {"code": "10", "nom": "Aube", "de": "3 - Est"}, {"code": "11", "nom": "Aude", "de": "5 - Méditerranée"}, {"code": "12", "nom": "Aveyron", "de": "5 - Méditerranée"}, {"code": "13", "nom": "Bouches-du-Rhône", "de": "5 - Méditerranée"}, {"code": "14", "nom": "Calvados", "de": "6 - NA"}, {"code": "15", "nom": "Cantal", "de": "4 - AURA"}, {"code": "16", "nom": "Charente", "de": "6 - NA"}, {"code": "17", "nom": "Charente-Maritime", "de": "6 - NA"}, {"code": "18", "nom": "Cher", "de": "6 - NA"}, {"code": "19", "nom": "Corrèze", "de": "6 - NA"}, {"code": "20", "nom": "Corse", "de": "5 - Méditerranée"}, {"code": "21", "nom": "Côte-d'Or", "de": "3 - Est"}, {"code": "22", "nom": "Côtes-d'Armor", "de": "6 - NA"}, {"code": "23", "nom": "Creuse", "de": "6 - NA"}, {"code": "24", "nom": "Dordogne", "de": "6 - NA"}, {"code": "25", "nom": "Doubs", "de": "3 - Est"}, {"code": "26", "nom": "Drôme", "de": "4 - AURA"}, {"code": "27", "nom": "Eure", "de": "6 - NA"}, {"code": "28", "nom": "Eure-et-Loir", "de": "6 - NA"}, {"code": "29", "nom": "Finistère", "de": "6 - NA"}, {"code": "30", "nom": "Gard", "de": "5 - Méditerranée"}, {"code": "31", "nom": "Haute-Garonne", "de": "5 - Méditerranée"}, {"code": "32", "nom": "Gers", "de": "6 - NA"}, {"code": "33", "nom": "Gironde", "de": "6 - NA"}, {"code": "34", "nom": "Hérault", "de": "5 - Méditerranée"}, {"code": "35", "nom": "Ille-et-Vilaine", "de": "6 - NA"}, {"code": "36", "nom": "Indre", "de": "6 - NA"}, {"code": "37", "nom": "Indre-et-Loire", "de": "6 - NA"}, {"code": "38", "nom": "Isère", "de": "4 - AURA"}, {"code": "39", "nom": "Jura", "de": "3 - Est"}, {"code": "40", "nom": "Landes", "de": "6 - NA"}, {"code": "41", "nom": "Loir-et-Cher", "de": "6 - NA"}, {"code": "42", "nom": "Loire", "de": "4 - AURA"}, {"code": "43", "nom": "Haute-Loire", "de": "4 - AURA"}, {"code": "44", "nom": "Loire-Atlantique", "de": "6 - NA"}, {"code": "45", "nom": "Loiret", "de": "6 - NA"}, {"code": "46", "nom": "Lot", "de": "6 - NA"}, {"code": "47", "nom": "Lot-et-Garonne", "de": "6 - NA"}, {"code": "48", "nom": "Lozère", "de": "6 - NA"}, {"code": "49", "nom": "Maine-et-Loire", "de": "6 - NA"}, {"code": "50", "nom": "Manche", "de": "6 - NA"}, {"code": "51", "nom": "Marne", "de": "3 - Est"}, {"code": "52", "nom": "Haute-Marne", "de": "3 - Est"}, {"code": "53", "nom": "Mayenne", "de": "6 - NA"}, {"code": "54", "nom": "Meurthe-et-Moselle", "de": "3 - Est"}, {"code": "55", "nom": "Meuse", "de": "3 - Est"}, {"code": "56", "nom": "Morbihan", "de": "6 - NA"}, {"code": "57", "nom": "Moselle", "de": "3 - Est"}, {"code": "58", "nom": "Nièvre", "de": "3 - Est"}, {"code": "59", "nom": "Nord", "de": "6 - NA"}, {"code": "60", "nom": "Oise", "de": "6 - NA"}, {"code": "61", "nom": "Orne", "de": "6 - NA"}, {"code": "62", "nom": "Pas-de-Calais", "de": "3 - Est"}, {"code": "63", "nom": "Puy-de-Dôme", "de": "4 - AURA"}, {"code": "64", "nom": "Pyrénées-Atlantiques", "de": "5 - Méditerranée"}, {"code": "65", "nom": "Hautes-Pyrénées", "de": "6 - NA"}, {"code": "66", "nom": "Pyrénées-Orientales", "de": "5 - Méditerranée"}, {"code": "67", "nom": "Bas-Rhin", "de": "3 - Est"}, {"code": "68", "nom": "Haut-Rhin", "de": "3 - Est"}, {"code": "69", "nom": "Rhône", "de": "4 - AURA"}, {"code": "70", "nom": "Haute-Saône", "de": "3 - Est"}, {"code": "71", "nom": "Saône-et-Loire", "de": "3 - Est"}, {"code": "72", "nom": "Sarthe", "de": "6 - NA"}, {"code": "73", "nom": "Savoie", "de": "4 - AURA"}, {"code": "74", "nom": "Haute-Savoie", "de": "4 - AURA"}, {"code": "75", "nom": "Paris", "de": "1 - Ile de France"}, {"code": "76", "nom": "Seine-Maritime", "de": "6 - NA"}, {"code": "77", "nom": "Seine-et-Marne", "de": "1 - Ile de France"}, {"code": "78", "nom": "Yvelines", "de": "1 - Ile de France"}, {"code": "79", "nom": "Deux-Sèvres", "de": "6 - NA"}, {"code": "80", "nom": "Somme", "de": "6 - NA"}, {"code": "81", "nom": "Tarn", "de": "6 - NA"}, {"code": "82", "nom": "Tarn-et-Garonne", "de": "6 - NA"}, {"code": "83", "nom": "Var", "de": "5 - Méditerranée"}, {"code": "84", "nom": "Vaucluse", "de": "5 - Méditerranée"}, {"code": "85", "nom": "Vendée", "de": "6 - NA"}, {"code": "86", "nom": "Vienne", "de": "6 - NA"}, {"code": "87", "nom": "Haute-Vienne", "de": "6 - NA"}, {"code": "88", "nom": "Vosges", "de": "3 - Est"}, {"code": "89", "nom": "Yonne", "de": "3 - Est"}, {"code": "90", "nom": "Terr. de Belfort", "de": "3 - Est"}, {"code": "91", "nom": "Essonne", "de": "1 - Ile de France"}, {"code": "92", "nom": "Hauts-de-Seine", "de": "1 - Ile de France"}, {"code": "93", "nom": "Seine-St-Denis", "de": "1 - Ile de France"}, {"code": "94", "nom": "Val-de-Marne", "de": "1 - Ile de France"}, {"code": "95", "nom": "Val-d'Oise", "de": "1 - Ile de France"}];
+    const COMMUNES_DB = {"75056": {"nom": "PARIS", "dpt": "75", "zone_abc": "Abis", "loyer": 28.5, "acv": "PARIS"}, "69123": {"nom": "LYON", "dpt": "69", "zone_abc": "A", "loyer": 17.8, "acv": "LYON"}, "13055": {"nom": "MARSEILLE", "dpt": "13", "zone_abc": "A", "loyer": 16.2, "acv": "MARSEILLE"}, "31555": {"nom": "TOULOUSE", "dpt": "31", "zone_abc": "B1", "loyer": 14.9, "acv": null}, "33063": {"nom": "BORDEAUX", "dpt": "33", "zone_abc": "A", "loyer": 16.5, "acv": null}, "44109": {"nom": "NANTES", "dpt": "44", "zone_abc": "B1", "loyer": 14.8, "acv": null}, "59350": {"nom": "LILLE", "dpt": "59", "zone_abc": "B1", "loyer": 15.1, "acv": null}, "67482": {"nom": "STRASBOURG", "dpt": "67", "zone_abc": "B1", "loyer": 14.2, "acv": null}, "80021": {"nom": "AMIENS", "dpt": "80", "zone_abc": "B1", "loyer": 12.8, "acv": "AMIENS"}, "06088": {"nom": "NICE", "dpt": "06", "zone_abc": "A", "loyer": 18.2, "acv": null}, "34172": {"nom": "MONTPELLIER", "dpt": "34", "zone_abc": "A", "loyer": 15.9, "acv": null}, "35238": {"nom": "RENNES", "dpt": "35", "zone_abc": "B1", "loyer": 14.5, "acv": null}, "76540": {"nom": "ROUEN", "dpt": "76", "zone_abc": "B1", "loyer": 13.4, "acv": null}, "51454": {"nom": "REIMS", "dpt": "51", "zone_abc": "B1", "loyer": 13.1, "acv": null}, "42218": {"nom": "SAINT-ETIENNE", "dpt": "42", "zone_abc": "B2", "loyer": 10.9, "acv": null}, "83137": {"nom": "TOULON", "dpt": "83", "zone_abc": "A", "loyer": 15.0, "acv": null}, "38185": {"nom": "GRENOBLE", "dpt": "38", "zone_abc": "B1", "loyer": 14.6, "acv": null}, "21231": {"nom": "DIJON", "dpt": "21", "zone_abc": "B1", "loyer": 13.8, "acv": null}, "49007": {"nom": "ANGERS", "dpt": "49", "zone_abc": "B1", "loyer": 13.9, "acv": "ANGERS"}, "30189": {"nom": "NIMES", "dpt": "30", "zone_abc": "B1", "loyer": 13.5, "acv": "NIMES"}, "63113": {"nom": "CLERMONT-FERRAND", "dpt": "63", "zone_abc": "B1", "loyer": 12.9, "acv": null}, "72181": {"nom": "LE MANS", "dpt": "72", "zone_abc": "B1", "loyer": 11.9, "acv": null}, "29232": {"nom": "BREST", "dpt": "29", "zone_abc": "B1", "loyer": 12.2, "acv": "BREST"}, "37261": {"nom": "TOURS", "dpt": "37", "zone_abc": "B1", "loyer": 13.7, "acv": null}, "87085": {"nom": "LIMOGES", "dpt": "87", "zone_abc": "B2", "loyer": 11.2, "acv": "LIMOGES"}, "92050": {"nom": "NANTERRE", "dpt": "92", "zone_abc": "Abis", "loyer": 23.4, "acv": null}, "93066": {"nom": "SAINT-DENIS", "dpt": "93", "zone_abc": "Abis", "loyer": 21.8, "acv": null}, "94028": {"nom": "CRETEIL", "dpt": "94", "zone_abc": "Abis", "loyer": 21.5, "acv": null}, "01004": {"nom": "AMBERIEU-EN-BUGEY", "dpt": "01", "zone_abc": "B2", "loyer": 12.5, "acv": "AMBERIEU-EN-BUGEY"}, "01053": {"nom": "BOURG-EN-BRESSE", "dpt": "01", "zone_abc": "B2", "loyer": 12.5, "acv": "BOURG-EN-BRESSE"}, "01283": {"nom": "OYONNAX", "dpt": "01", "zone_abc": "B2", "loyer": 12.5, "acv": "OYONNAX"}, "02168": {"nom": "CHATEAU-THIERRY", "dpt": "02", "zone_abc": "B2", "loyer": 12.5, "acv": "CHATEAU-THIERRY"}, "02408": {"nom": "LAON", "dpt": "02", "zone_abc": "B2", "loyer": 12.5, "acv": "LAON"}, "02691": {"nom": "SAINT-QUENTIN", "dpt": "02", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-QUENTIN"}, "02722": {"nom": "SOISSONS", "dpt": "02", "zone_abc": "B2", "loyer": 12.5, "acv": "SOISSONS"}, "03185": {"nom": "MONTLUCON", "dpt": "03", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTLUCON"}, "03190": {"nom": "MOULINS", "dpt": "03", "zone_abc": "B2", "loyer": 12.5, "acv": "MOULINS"}, "03310": {"nom": "VICHY", "dpt": "03", "zone_abc": "B2", "loyer": 12.5, "acv": "VICHY"}, "04070": {"nom": "DIGNE-LES-BAINS", "dpt": "04", "zone_abc": "B2", "loyer": 12.5, "acv": "DIGNE-LES-BAINS"}, "04112": {"nom": "MANOSQUE", "dpt": "04", "zone_abc": "B2", "loyer": 12.5, "acv": "MANOSQUE"}, "05023": {"nom": "BRIANCON", "dpt": "05", "zone_abc": "B2", "loyer": 12.5, "acv": "BRIANCON"}, "05061": {"nom": "GAP", "dpt": "05", "zone_abc": "B2", "loyer": 12.5, "acv": "GAP"}, "06069": {"nom": "GRASSE", "dpt": "06", "zone_abc": "B1", "loyer": 12.5, "acv": "GRASSE"}, "06155": {"nom": "VALLAURIS", "dpt": "06", "zone_abc": "B1", "loyer": 12.5, "acv": "VALLAURIS"}, "07010": {"nom": "ANNONAY", "dpt": "07", "zone_abc": "B2", "loyer": 12.5, "acv": "ANNONAY"}, "07019": {"nom": "AUBENAS", "dpt": "07", "zone_abc": "B2", "loyer": 12.5, "acv": "AUBENAS"}, "07186": {"nom": "PRIVAS", "dpt": "07", "zone_abc": "B2", "loyer": 12.5, "acv": "PRIVAS"}, "08105": {"nom": "CHARLEVILLE-MEZIERES", "dpt": "08", "zone_abc": "B2", "loyer": 12.5, "acv": "CHARLEVILLE-MEZIERES"}, "08409": {"nom": "SEDAN", "dpt": "08", "zone_abc": "B2", "loyer": 12.5, "acv": "SEDAN"}, "09122": {"nom": "FOIX", "dpt": "09", "zone_abc": "B2", "loyer": 12.5, "acv": "FOIX"}, "09225": {"nom": "PAMIERS", "dpt": "09", "zone_abc": "B2", "loyer": 12.5, "acv": "PAMIERS"}, "10387": {"nom": "TROYES", "dpt": "10", "zone_abc": "B2", "loyer": 12.5, "acv": "TROYES"}, "11069": {"nom": "CARCASSONNE", "dpt": "11", "zone_abc": "B2", "loyer": 12.5, "acv": "CARCASSONNE"}, "11262": {"nom": "NARBONNE", "dpt": "11", "zone_abc": "B2", "loyer": 12.5, "acv": "NARBONNE"}, "12145": {"nom": "MILLAU", "dpt": "12", "zone_abc": "B2", "loyer": 12.5, "acv": "MILLAU"}, "12202": {"nom": "RODEZ", "dpt": "12", "zone_abc": "B2", "loyer": 12.5, "acv": "RODEZ"}, "12300": {"nom": "VILLEFRANCHE DE ROUERGUE", "dpt": "12", "zone_abc": "B2", "loyer": 12.5, "acv": "VILLEFRANCHE DE ROUERGUE"}, "13004": {"nom": "ARLES", "dpt": "13", "zone_abc": "B1", "loyer": 12.5, "acv": "ARLES"}, "13108": {"nom": "TARASCON", "dpt": "13", "zone_abc": "B1", "loyer": 12.5, "acv": "TARASCON"}, "14366": {"nom": "LISIEUX", "dpt": "14", "zone_abc": "B2", "loyer": 12.5, "acv": "LISIEUX"}, "14762": {"nom": "VIRE", "dpt": "14", "zone_abc": "B2", "loyer": 12.5, "acv": "VIRE"}, "15014": {"nom": "AURILLAC", "dpt": "15", "zone_abc": "B2", "loyer": 12.5, "acv": "AURILLAC"}, "16015": {"nom": "ANGOULEME", "dpt": "16", "zone_abc": "B2", "loyer": 12.5, "acv": "ANGOULEME"}, "16102": {"nom": "COGNAC", "dpt": "16", "zone_abc": "B2", "loyer": 12.5, "acv": "COGNAC"}, "17299": {"nom": "ROCHEFORT", "dpt": "17", "zone_abc": "B2", "loyer": 12.5, "acv": "ROCHEFORT"}, "17415": {"nom": "SAINTES", "dpt": "17", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINTES"}, "18033": {"nom": "BOURGES", "dpt": "18", "zone_abc": "B2", "loyer": 12.5, "acv": "BOURGES"}, "18279": {"nom": "VIERZON", "dpt": "18", "zone_abc": "B2", "loyer": 12.5, "acv": "VIERZON"}, "19031": {"nom": "BRIVE-LA-GAILLARDE", "dpt": "19", "zone_abc": "B2", "loyer": 12.5, "acv": "BRIVE-LA-GAILLARDE"}, "19272": {"nom": "TULLE", "dpt": "19", "zone_abc": "B2", "loyer": 12.5, "acv": "TULLE"}, "22113": {"nom": "LANNION", "dpt": "22", "zone_abc": "B2", "loyer": 12.5, "acv": "LANNION"}, "22278": {"nom": "SAINT-BRIEUC", "dpt": "22", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-BRIEUC"}, "23096": {"nom": "GUERET", "dpt": "23", "zone_abc": "B2", "loyer": 12.5, "acv": "GUERET"}, "24037": {"nom": "BERGERAC", "dpt": "24", "zone_abc": "B2", "loyer": 12.5, "acv": "BERGERAC"}, "24322": {"nom": "PERIGUEUX", "dpt": "24", "zone_abc": "B2", "loyer": 12.5, "acv": "PERIGUEUX"}, "25056": {"nom": "BESANCON", "dpt": "25", "zone_abc": "B2", "loyer": 12.5, "acv": "BESANCON"}, "25388": {"nom": "MONTBELIARD", "dpt": "25", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTBELIARD"}, "26198": {"nom": "MONTELIMAR", "dpt": "26", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTELIMAR"}, "26281": {"nom": "ROMANS-SUR-ISERE", "dpt": "26", "zone_abc": "B2", "loyer": 12.5, "acv": "ROMANS-SUR-ISERE"}, "26362": {"nom": "VALENCE", "dpt": "26", "zone_abc": "B2", "loyer": 12.5, "acv": "VALENCE"}, "27229": {"nom": "EVREUX", "dpt": "27", "zone_abc": "B2", "loyer": 12.5, "acv": "EVREUX"}, "27375": {"nom": "LOUVIERS", "dpt": "27", "zone_abc": "B2", "loyer": 12.5, "acv": "LOUVIERS"}, "27681": {"nom": "VERNON", "dpt": "27", "zone_abc": "B2", "loyer": 12.5, "acv": "VERNON"}, "28085": {"nom": "CHARTRES", "dpt": "28", "zone_abc": "B2", "loyer": 12.5, "acv": "CHARTRES"}, "28134": {"nom": "DREUX", "dpt": "28", "zone_abc": "B2", "loyer": 12.5, "acv": "DREUX"}, "28280": {"nom": "NOGENT-LE-ROTROU", "dpt": "28", "zone_abc": "B2", "loyer": 12.5, "acv": "NOGENT-LE-ROTROU"}, "29151": {"nom": "MORLAIX", "dpt": "29", "zone_abc": "B2", "loyer": 12.5, "acv": "MORLAIX"}, "30007": {"nom": "ALES", "dpt": "30", "zone_abc": "B2", "loyer": 12.5, "acv": "ALES"}, "30028": {"nom": "BAGNOLS-SUR-CEZE", "dpt": "30", "zone_abc": "B2", "loyer": 12.5, "acv": "BAGNOLS-SUR-CEZE"}, "31451": {"nom": "REVEL", "dpt": "31", "zone_abc": "B2", "loyer": 12.5, "acv": "REVEL"}, "32013": {"nom": "AUCH", "dpt": "32", "zone_abc": "B2", "loyer": 12.5, "acv": "AUCH"}, "33243": {"nom": "LIBOURNE", "dpt": "33", "zone_abc": "B2", "loyer": 12.5, "acv": "LIBOURNE"}, "34003": {"nom": "AGDE", "dpt": "34", "zone_abc": "B2", "loyer": 12.5, "acv": "AGDE"}, "34032": {"nom": "BEZIERS", "dpt": "34", "zone_abc": "B2", "loyer": 12.5, "acv": "BEZIERS"}, "34145": {"nom": "LUNEL", "dpt": "34", "zone_abc": "B2", "loyer": 12.5, "acv": "LUNEL"}, "34301": {"nom": "SETE", "dpt": "34", "zone_abc": "B2", "loyer": 12.5, "acv": "SETE"}, "35115": {"nom": "FOUGERES", "dpt": "35", "zone_abc": "B2", "loyer": 12.5, "acv": "FOUGERES"}, "35236": {"nom": "REDON", "dpt": "35", "zone_abc": "B2", "loyer": 12.5, "acv": "REDON"}, "35288": {"nom": "SAINT-MALO", "dpt": "35", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-MALO"}, "35360": {"nom": "VITRE", "dpt": "35", "zone_abc": "B2", "loyer": 12.5, "acv": "VITRE"}, "36044": {"nom": "CHATEAUROUX", "dpt": "36", "zone_abc": "B2", "loyer": 12.5, "acv": "CHATEAUROUX"}, "36088": {"nom": "ISSOUDUN", "dpt": "36", "zone_abc": "B2", "loyer": 12.5, "acv": "ISSOUDUN"}, "37072": {"nom": "CHINON", "dpt": "37", "zone_abc": "B2", "loyer": 12.5, "acv": "CHINON"}, "38053": {"nom": "BOURGOIN-JALLIEU", "dpt": "38", "zone_abc": "B2", "loyer": 12.5, "acv": "BOURGOIN-JALLIEU"}, "38544": {"nom": "VIENNE", "dpt": "38", "zone_abc": "B2", "loyer": 12.5, "acv": "VIENNE"}, "38563": {"nom": "VOIRON", "dpt": "38", "zone_abc": "B2", "loyer": 12.5, "acv": "VOIRON"}, "39198": {"nom": "DOLE", "dpt": "39", "zone_abc": "B2", "loyer": 12.5, "acv": "DOLE"}, "39300": {"nom": "LONS-LE-SAUNIER", "dpt": "39", "zone_abc": "B2", "loyer": 12.5, "acv": "LONS-LE-SAUNIER"}, "40088": {"nom": "DAX", "dpt": "40", "zone_abc": "B2", "loyer": 12.5, "acv": "DAX"}, "40192": {"nom": "MONT-DE-MARSAN", "dpt": "40", "zone_abc": "B2", "loyer": 12.5, "acv": "MONT-DE-MARSAN"}, "41018": {"nom": "BLOIS", "dpt": "41", "zone_abc": "B2", "loyer": 12.5, "acv": "BLOIS"}, "41194": {"nom": "ROMORANTIN-LANTHENAY", "dpt": "41", "zone_abc": "B2", "loyer": 12.5, "acv": "ROMORANTIN-LANTHENAY"}, "42147": {"nom": "MONTBRISON", "dpt": "42", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTBRISON"}, "42187": {"nom": "ROANNE", "dpt": "42", "zone_abc": "B2", "loyer": 12.5, "acv": "ROANNE"}, "43157": {"nom": "LE PUY-EN-VELAY", "dpt": "43", "zone_abc": "B2", "loyer": 12.5, "acv": "LE PUY-EN-VELAY"}, "44036": {"nom": "CHATEAUBRIANT", "dpt": "44", "zone_abc": "B2", "loyer": 12.5, "acv": "CHATEAUBRIANT"}, "44184": {"nom": "SAINT-NAZAIRE", "dpt": "44", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-NAZAIRE"}, "45155": {"nom": "GIEN", "dpt": "45", "zone_abc": "B2", "loyer": 12.5, "acv": "GIEN"}, "45208": {"nom": "MONTARGIS", "dpt": "45", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTARGIS"}, "45252": {"nom": "PITHIVIERS", "dpt": "45", "zone_abc": "B2", "loyer": 12.5, "acv": "PITHIVIERS"}, "46042": {"nom": "CAHORS", "dpt": "46", "zone_abc": "B2", "loyer": 12.5, "acv": "CAHORS"}, "46102": {"nom": "FIGEAC", "dpt": "46", "zone_abc": "B2", "loyer": 12.5, "acv": "FIGEAC"}, "47001": {"nom": "AGEN", "dpt": "47", "zone_abc": "B2", "loyer": 12.5, "acv": "AGEN"}, "47157": {"nom": "MARMANDE", "dpt": "47", "zone_abc": "B2", "loyer": 12.5, "acv": "MARMANDE"}, "47310": {"nom": "TONNEINS", "dpt": "47", "zone_abc": "B2", "loyer": 12.5, "acv": "TONNEINS"}, "47323": {"nom": "VILLENEUVE-SUR-LOT", "dpt": "47", "zone_abc": "B2", "loyer": 12.5, "acv": "VILLENEUVE-SUR-LOT"}, "48095": {"nom": "MENDE", "dpt": "48", "zone_abc": "B2", "loyer": 12.5, "acv": "MENDE"}, "49099": {"nom": "CHOLET", "dpt": "49", "zone_abc": "B2", "loyer": 12.5, "acv": "CHOLET"}, "49328": {"nom": "SAUMUR", "dpt": "49", "zone_abc": "B2", "loyer": 12.5, "acv": "SAUMUR"}, "50129": {"nom": "CHERBOURG", "dpt": "50", "zone_abc": "B2", "loyer": 12.5, "acv": "CHERBOURG"}, "50502": {"nom": "SAINT-LO", "dpt": "50", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-LO"}, "51108": {"nom": "CHALONS-EN-CHAMPAGNE", "dpt": "51", "zone_abc": "B2", "loyer": 12.5, "acv": "CHALONS-EN-CHAMPAGNE"}, "51230": {"nom": "EPERNAY", "dpt": "51", "zone_abc": "B2", "loyer": 12.5, "acv": "EPERNAY"}, "52121": {"nom": "CHAUMONT", "dpt": "52", "zone_abc": "B2", "loyer": 12.5, "acv": "CHAUMONT"}, "52448": {"nom": "SAINT-DIZIER", "dpt": "52", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-DIZIER"}, "53130": {"nom": "LAVAL", "dpt": "53", "zone_abc": "B2", "loyer": 12.5, "acv": "LAVAL"}, "54323": {"nom": "LONGWY", "dpt": "54", "zone_abc": "B2", "loyer": 12.5, "acv": "LONGWY"}, "54329": {"nom": "LUNEVILLE", "dpt": "54", "zone_abc": "B2", "loyer": 12.5, "acv": "LUNEVILLE"}, "54528": {"nom": "TOUL", "dpt": "54", "zone_abc": "B2", "loyer": 12.5, "acv": "TOUL"}, "55029": {"nom": "BAR-LE-DUC", "dpt": "55", "zone_abc": "B2", "loyer": 12.5, "acv": "BAR-LE-DUC"}, "55545": {"nom": "VERDUN", "dpt": "55", "zone_abc": "B2", "loyer": 12.5, "acv": "VERDUN"}, "56121": {"nom": "LORIENT", "dpt": "56", "zone_abc": "B2", "loyer": 12.5, "acv": "LORIENT"}, "56178": {"nom": "PONTIVY", "dpt": "56", "zone_abc": "B2", "loyer": 12.5, "acv": "PONTIVY"}, "56260": {"nom": "VANNES", "dpt": "56", "zone_abc": "B2", "loyer": 12.5, "acv": "VANNES"}, "57227": {"nom": "FORBACH", "dpt": "57", "zone_abc": "B2", "loyer": 12.5, "acv": "FORBACH"}, "57606": {"nom": "SAINT-AVOLD", "dpt": "57", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-AVOLD"}, "57630": {"nom": "SARREBOURG", "dpt": "57", "zone_abc": "B2", "loyer": 12.5, "acv": "SARREBOURG"}, "57631": {"nom": "SARREGUEMINES", "dpt": "57", "zone_abc": "B2", "loyer": 12.5, "acv": "SARREGUEMINES"}, "57672": {"nom": "THIONVILLE", "dpt": "57", "zone_abc": "B2", "loyer": 12.5, "acv": "THIONVILLE"}, "58086": {"nom": "COSNE-COURS-SUR-LOIRE", "dpt": "58", "zone_abc": "B2", "loyer": 12.5, "acv": "COSNE-COURS-SUR-LOIRE"}, "58194": {"nom": "NEVERS", "dpt": "58", "zone_abc": "B2", "loyer": 12.5, "acv": "NEVERS"}, "59122": {"nom": "CAMBRAI", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "CAMBRAI"}, "59172": {"nom": "DENAIN", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "DENAIN"}, "59178": {"nom": "DOUAI", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "DOUAI"}, "59183": {"nom": "DUNKERQUE", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "DUNKERQUE"}, "59392": {"nom": "MAUBEUGE", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "MAUBEUGE"}, "59606": {"nom": "VALENCIENNES", "dpt": "59", "zone_abc": "B2", "loyer": 12.5, "acv": "VALENCIENNES"}, "60057": {"nom": "BEAUVAIS", "dpt": "60", "zone_abc": "B2", "loyer": 12.5, "acv": "BEAUVAIS"}, "60159": {"nom": "COMPIEGNE", "dpt": "60", "zone_abc": "B2", "loyer": 12.5, "acv": "COMPIEGNE"}, "60175": {"nom": "CREIL", "dpt": "60", "zone_abc": "B2", "loyer": 12.5, "acv": "CREIL"}, "60612": {"nom": "SENLIS", "dpt": "60", "zone_abc": "B2", "loyer": 12.5, "acv": "SENLIS"}, "61001": {"nom": "ALENCON", "dpt": "61", "zone_abc": "B2", "loyer": 12.5, "acv": "ALENCON"}, "61006": {"nom": "ARGENTAN", "dpt": "61", "zone_abc": "B2", "loyer": 12.5, "acv": "ARGENTAN"}, "61169": {"nom": "FLERS", "dpt": "61", "zone_abc": "B2", "loyer": 12.5, "acv": "FLERS"}, "62041": {"nom": "ARRAS", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "ARRAS"}, "62119": {"nom": "BETHUNE", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "BETHUNE"}, "62160": {"nom": "BOULOGNE-SUR-MER", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "BOULOGNE-SUR-MER"}, "62178": {"nom": "BRUAY-LA-BUISSIERE", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "BRUAY-LA-BUISSIERE"}, "62193": {"nom": "CALAIS", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "CALAIS"}, "62498": {"nom": "LENS", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "LENS"}, "62510": {"nom": "LIEVIN", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "LIEVIN"}, "62765": {"nom": "SAINT-OMER", "dpt": "62", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-OMER"}, "63178": {"nom": "ISSOIRE", "dpt": "63", "zone_abc": "B2", "loyer": 12.5, "acv": "ISSOIRE"}, "63300": {"nom": "RIOM", "dpt": "63", "zone_abc": "B2", "loyer": 12.5, "acv": "RIOM"}, "63430": {"nom": "THIERS", "dpt": "63", "zone_abc": "B2", "loyer": 12.5, "acv": "THIERS"}, "64102": {"nom": "BAYONNE", "dpt": "64", "zone_abc": "B2", "loyer": 12.5, "acv": "BAYONNE"}, "64445": {"nom": "PAU", "dpt": "64", "zone_abc": "B2", "loyer": 12.5, "acv": "PAU"}, "65286": {"nom": "LOURDES", "dpt": "65", "zone_abc": "B2", "loyer": 12.5, "acv": "LOURDES"}, "65440": {"nom": "TARBES", "dpt": "65", "zone_abc": "B2", "loyer": 12.5, "acv": "TARBES"}, "66136": {"nom": "PERPIGNAN", "dpt": "66", "zone_abc": "B2", "loyer": 12.5, "acv": "PERPIGNAN"}, "67180": {"nom": "HAGUENAU", "dpt": "67", "zone_abc": "B2", "loyer": 12.5, "acv": "HAGUENAU"}, "67437": {"nom": "SAVERNE", "dpt": "67", "zone_abc": "B2", "loyer": 12.5, "acv": "SAVERNE"}, "68066": {"nom": "COLMAR", "dpt": "68", "zone_abc": "B2", "loyer": 12.5, "acv": "COLMAR"}, "68112": {"nom": "GUEBWILLER", "dpt": "68", "zone_abc": "B2", "loyer": 12.5, "acv": "GUEBWILLER"}, "68224": {"nom": "MULHOUSE", "dpt": "68", "zone_abc": "B2", "loyer": 12.5, "acv": "MULHOUSE"}, "69243": {"nom": "TARARE", "dpt": "69", "zone_abc": "B1", "loyer": 12.5, "acv": "TARARE"}, "70550": {"nom": "VESOUL", "dpt": "70", "zone_abc": "B2", "loyer": 12.5, "acv": "VESOUL"}, "71014": {"nom": "AUTUN", "dpt": "71", "zone_abc": "B2", "loyer": 12.5, "acv": "AUTUN"}, "71076": {"nom": "CHALON-SUR-SAONE", "dpt": "71", "zone_abc": "B2", "loyer": 12.5, "acv": "CHALON-SUR-SAONE"}, "71153": {"nom": "LE CREUSOT", "dpt": "71", "zone_abc": "B2", "loyer": 12.5, "acv": "LE CREUSOT"}, "71270": {"nom": "MACON", "dpt": "71", "zone_abc": "B2", "loyer": 12.5, "acv": "MACON"}, "71306": {"nom": "MONTCEAU-LES-MINES", "dpt": "71", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTCEAU-LES-MINES"}, "72154": {"nom": "LA FLECHE", "dpt": "72", "zone_abc": "B2", "loyer": 12.5, "acv": "LA FLECHE"}, "72264": {"nom": "SABLE SUR SARTHE", "dpt": "72", "zone_abc": "B2", "loyer": 12.5, "acv": "SABLE SUR SARTHE"}, "73065": {"nom": "CHAMBERY", "dpt": "73", "zone_abc": "B2", "loyer": 12.5, "acv": "CHAMBERY"}, "74225": {"nom": "RUMILLY", "dpt": "74", "zone_abc": "B2", "loyer": 12.5, "acv": "RUMILLY"}, "76217": {"nom": "DIEPPE", "dpt": "76", "zone_abc": "B2", "loyer": 12.5, "acv": "DIEPPE"}, "76259": {"nom": "FECAMP", "dpt": "76", "zone_abc": "B2", "loyer": 12.5, "acv": "FECAMP"}, "77014": {"nom": "AVON", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "AVON"}, "77131": {"nom": "COULOMMIERS", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "COULOMMIERS"}, "77186": {"nom": "FONTAINEBLEAU", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "FONTAINEBLEAU"}, "77284": {"nom": "MEAUX", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "MEAUX"}, "77288": {"nom": "MELUN", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "MELUN"}, "77305": {"nom": "MONTEREAU-FAULT-YONNE", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTEREAU-FAULT-YONNE"}, "77333": {"nom": "NEMOURS", "dpt": "77", "zone_abc": "B2", "loyer": 12.5, "acv": "NEMOURS"}, "78335": {"nom": "LIMAY", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "LIMAY"}, "78361": {"nom": "MANTES-LA-JOLIE", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "MANTES-LA-JOLIE"}, "78440": {"nom": "LES MUREAUX", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "LES MUREAUX"}, "78498": {"nom": "POISSY", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "POISSY"}, "78517": {"nom": "RAMBOUILLET", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "RAMBOUILLET"}, "78586": {"nom": "SARTROUVILLE", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "SARTROUVILLE"}, "78621": {"nom": "TRAPPES", "dpt": "78", "zone_abc": "B2", "loyer": 12.5, "acv": "TRAPPES"}, "79049": {"nom": "BRESSUIRE", "dpt": "79", "zone_abc": "B2", "loyer": 12.5, "acv": "BRESSUIRE"}, "79191": {"nom": "NIORT", "dpt": "79", "zone_abc": "B2", "loyer": 12.5, "acv": "NIORT"}, "80001": {"nom": "ABBEVILLE", "dpt": "80", "zone_abc": "B2", "loyer": 12.5, "acv": "ABBEVILLE"}, "81004": {"nom": "ALBI", "dpt": "81", "zone_abc": "B2", "loyer": 12.5, "acv": "ALBI"}, "81065": {"nom": "CASTRES", "dpt": "81", "zone_abc": "B2", "loyer": 12.5, "acv": "CASTRES"}, "81163": {"nom": "MAZAMET", "dpt": "81", "zone_abc": "B2", "loyer": 12.5, "acv": "MAZAMET"}, "82121": {"nom": "MONTAUBAN", "dpt": "82", "zone_abc": "B2", "loyer": 12.5, "acv": "MONTAUBAN"}, "83023": {"nom": "BRIGNOLES", "dpt": "83", "zone_abc": "B2", "loyer": 12.5, "acv": "BRIGNOLES"}, "83050": {"nom": "DRAGUIGNAN", "dpt": "83", "zone_abc": "B2", "loyer": 12.5, "acv": "DRAGUIGNAN"}, "84007": {"nom": "AVIGNON", "dpt": "84", "zone_abc": "B2", "loyer": 12.5, "acv": "AVIGNON"}, "84031": {"nom": "CARPENTRAS", "dpt": "84", "zone_abc": "B2", "loyer": 12.5, "acv": "CARPENTRAS"}, "84035": {"nom": "CAVAILLON", "dpt": "84", "zone_abc": "B2", "loyer": 12.5, "acv": "CAVAILLON"}, "85092": {"nom": "FONTENAY-LE-COMTE", "dpt": "85", "zone_abc": "B2", "loyer": 12.5, "acv": "FONTENAY-LE-COMTE"}, "85191": {"nom": "LA-ROCHE-SUR-YON", "dpt": "85", "zone_abc": "B2", "loyer": 12.5, "acv": "LA-ROCHE-SUR-YON"}, "86066": {"nom": "CHATELLERAULT", "dpt": "86", "zone_abc": "B2", "loyer": 12.5, "acv": "CHATELLERAULT"}, "86194": {"nom": "POITIERS", "dpt": "86", "zone_abc": "B2", "loyer": 12.5, "acv": "POITIERS"}, "88160": {"nom": "EPINAL", "dpt": "88", "zone_abc": "B2", "loyer": 12.5, "acv": "EPINAL"}, "88413": {"nom": "SAINT-DIE-DES-VOSGES", "dpt": "88", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-DIE-DES-VOSGES"}, "89024": {"nom": "AUXERRE", "dpt": "89", "zone_abc": "B2", "loyer": 12.5, "acv": "AUXERRE"}, "89387": {"nom": "SENS", "dpt": "89", "zone_abc": "B2", "loyer": 12.5, "acv": "SENS"}, "90010": {"nom": "BELFORT", "dpt": "90", "zone_abc": "B2", "loyer": 12.5, "acv": "BELFORT"}, "91021": {"nom": "ARPAJON", "dpt": "91", "zone_abc": "B2", "loyer": 12.5, "acv": "ARPAJON"}, "91174": {"nom": "CORBEIL-ESSONNES", "dpt": "91", "zone_abc": "B2", "loyer": 12.5, "acv": "CORBEIL-ESSONNES"}, "91223": {"nom": "ETAMPES", "dpt": "91", "zone_abc": "B2", "loyer": 12.5, "acv": "ETAMPES"}, "91228": {"nom": "EVRY", "dpt": "91", "zone_abc": "B2", "loyer": 12.5, "acv": "EVRY"}, "91570": {"nom": "SAINT-MICHEL-SUR-ORGE", "dpt": "91", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-MICHEL-SUR-ORGE"}, "95052": {"nom": "BEAUMONT-SUR-OISE", "dpt": "95", "zone_abc": "B2", "loyer": 12.5, "acv": "BEAUMONT-SUR-OISE"}, "95277": {"nom": "GONESSE", "dpt": "95", "zone_abc": "B2", "loyer": 12.5, "acv": "GONESSE"}, "95487": {"nom": "PERSAN", "dpt": "95", "zone_abc": "B2", "loyer": 12.5, "acv": "PERSAN"}, "97101": {"nom": "LES ABYMES", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "LES ABYMES"}, "97105": {"nom": "BASSE-TERRE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "BASSE-TERRE"}, "97120": {"nom": "POINTE-A-PITRE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "POINTE-A-PITRE"}, "97209": {"nom": "FORT-DE-FRANCE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "FORT-DE-FRANCE"}, "97213": {"nom": "LE LAMENTIN", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "LE LAMENTIN"}, "97302": {"nom": "CAYENNE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "CAYENNE"}, "97311": {"nom": "SAINT-LAURENT-DU-MARONI", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-LAURENT-DU-MARONI"}, "97407": {"nom": "LE PORT", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "LE PORT"}, "97409": {"nom": "SAINT-ANDRE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-ANDRE"}, "97412": {"nom": "SAINT-JOSEPH", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-JOSEPH"}, "97416": {"nom": "SAINT-PIERRE", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "SAINT-PIERRE"}, "97607": {"nom": "DEMBENI", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "DEMBENI"}, "97608": {"nom": "DZAOUDZI", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "DZAOUDZI"}, "97611": {"nom": "MAMOUDZOU", "dpt": "97", "zone_abc": "B2", "loyer": 12.5, "acv": "MAMOUDZOU"}, "2A004": {"nom": "AJACCIO", "dpt": "2A", "zone_abc": "B2", "loyer": 12.5, "acv": "AJACCIO"}, "2B033": {"nom": "BASTIA", "dpt": "2B", "zone_abc": "B2", "loyer": 12.5, "acv": "BASTIA"}};
+
+    // 2. DONNÉES DYNAMIQUES DES 5 PHASES (EXTRAITES DIRECTEMENT DU CLASSEUR EXCEL)
+    let phasesData = [
+      {
+        id: 1,
+        title: "Sous-ensemble 1 - Phase 1",
+        nom_phase: "Démolition",
+        lots: 0,
+        stade: "Développement",
+        date_coe: "",
+        regime: "Foyer",
+        code_pat: "PAT-75013-001",
+        code_sap: "SAP-2026-901",
+        resp_prog: "Alioune DIENE",
+        zone: "II",
+        dep: "75",
+        insee: "75056",
+        type_op: "DR - DM",
+        marche: "Conception Réalisation",
+        dian: "Non",
+        anru: "Non",
+        sdp: 0,
+        shab: 0,
+        communes: 0,
+        tfpb: 0,
+        date_pc_depot: "",
+        date_pc_obtention: "",
+        date_ao: "",
+        date_dossier_fin: "",
+        date_ordre_service: "2022-03-01",
+        date_livraison: "2022-07-01",
+        date_mes: "2022-07-01"
+      },
+      {
+        id: 2,
+        title: "Sous-ensemble 2 - Phase 2",
+        nom_phase: "Construction Neuve",
+        lots: 78,
+        stade: "Développement",
+        date_coe: "2022-01-15",
+        regime: "RS",
+        code_pat: "PAT-75013-002",
+        code_sap: "SAP-2026-904",
+        resp_prog: "Alioune DIENE",
+        zone: "II",
+        dep: "75",
+        insee: "75056",
+        type_op: "DR - CN",
+        marche: "Entreprise Générale",
+        dian: "Non",
+        anru: "Non",
+        sdp: 2350,
+        shab: 2225,
+        communes: 250,
+        tfpb: 25,
+        date_pc_depot: "2022-03-01",
+        date_pc_obtention: "2022-09-15",
+        date_ao: "2022-10-01",
+        date_dossier_fin: "2022-11-15",
+        date_ordre_service: "2023-01-10",
+        date_livraison: "2024-01-01",
+        date_mes: "2024-01-01"
+      },
+      {
+        id: 3,
+        title: "Sous-ensemble 3 - Phase 3",
+        nom_phase: "Réhabilitation",
+        lots: 65,
+        stade: "Développement",
+        date_coe: "",
+        regime: "PF",
+        code_pat: "PAT-75013-003",
+        code_sap: "SAP-2026-908",
+        resp_prog: "Alioune DIENE",
+        zone: "II",
+        dep: "75",
+        insee: "75056",
+        type_op: "RH lourde",
+        marche: "Corps d'états séparés",
+        dian: "Non",
+        anru: "Non",
+        sdp: 1800,
+        shab: 1525,
+        communes: 180,
+        tfpb: 15,
+        date_pc_depot: "2022-06-01",
+        date_pc_obtention: "2022-12-01",
+        date_ao: "2022-12-15",
+        date_dossier_fin: "2023-01-15",
+        date_ordre_service: "2023-03-01",
+        date_livraison: "2024-01-01",
+        date_mes: "2024-01-01"
+      },
+      {
+        id: 4,
+        title: "Sous-ensemble 4 - Phase 4",
+        nom_phase: "VEFA",
+        lots: 65,
+        stade: "Pré-OS",
+        date_coe: "",
+        regime: "RS",
+        code_pat: "PAT-75013-004",
+        code_sap: "SAP-2026-912",
+        resp_prog: "Alioune DIENE",
+        zone: "II",
+        dep: "75",
+        insee: "75056",
+        type_op: "VEFA",
+        marche: "Autre",
+        dian: "Non",
+        anru: "Non",
+        sdp: 1800,
+        shab: 1525,
+        communes: 150,
+        tfpb: 20,
+        date_pc_depot: "2021-10-01",
+        date_pc_obtention: "2022-04-15",
+        date_ao: "",
+        date_dossier_fin: "2021-12-01",
+        date_ordre_service: "2022-01-15",
+        date_livraison: "2022-03-01",
+        date_mes: "2022-03-01"
+      },
+      {
+        id: 5,
+        title: "Sous-ensemble 5 - Phase 5",
+        nom_phase: "Hébergement",
+        lots: 0,
+        stade: "Développement",
+        date_coe: "",
+        regime: "Hébergement",
+        code_pat: "PAT-75013-005",
+        code_sap: "SAP-2026-915",
+        resp_prog: "Alioune DIENE",
+        zone: "III",
+        dep: "75",
+        insee: "75056",
+        type_op: "DR - CN",
+        marche: "Entreprise Générale",
+        dian: "Non",
+        anru: "Non",
+        sdp: 0,
+        shab: 0,
+        communes: 0,
+        tfpb: 0,
+        date_pc_depot: "",
+        date_pc_obtention: "",
+        date_ao: "",
+        date_dossier_fin: "",
+        date_ordre_service: "",
+        date_livraison: "",
+        date_mes: ""
+      }
+    ];
+
+    let activePhaseIndex = 1; // Par défaut Phase 2 (Construction Neuve - 78 lots)
+
+    // Initialisation du sélecteur des départements
+    function initDepartementsSelect() {
+      const sel = document.getElementById('departement_select');
+      sel.innerHTML = '';
+      CP_LIST.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.code;
+        opt.textContent = d.code + ' - ' + d.nom;
+        sel.appendChild(opt);
+      });
+    }
+
+    // Formatage professionnel des Directions Régionales Action Logement
+    function formatDE(rawDe) {
+      if (!rawDe) return 'Direction Régionale Action Logement';
+      const str = String(rawDe).trim();
+      const deMap = {
+        '1 - Ile de France': 'Direction Régionale Île-de-France (DE 01)',
+        '3 - Est': 'Direction Régionale Grand Est & Nord (DE 03)',
+        '4 - AURA': 'Direction Régionale Auvergne-Rhône-Alpes (DE 04)',
+        '5 - Méditerranée': 'Direction Régionale Méditerranée (DE 05)',
+        '5 - Méditerranée': 'Direction Régionale Méditerranée (DE 05)',
+        '6 - NA': 'Direction Régionale Nouvelle-Aquitaine & Ouest (DE 06)'
+      };
+      if (deMap[str]) return deMap[str];
+      const match = str.match(/^(\d+)\s*-\s*(.+)$/);
+      if (match) {
+        const num = match[1].padStart(2, '0');
+        return `Direction Régionale ${match[2]} (DE ${num})`;
+      }
+      return 'Direction Régionale ' + str;
+    }
+
+    // Rendu dynamique de la barre des phases conforme au classeur EUREKA
+    function renderPhasePills() {
+      const container = document.getElementById('phase-pills-container');
+      container.innerHTML = '';
+
+      const lead = document.createElement('span');
+      lead.className = 'phase-label-lead';
+      lead.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Sous-ensemble / Phase :`;
+      container.appendChild(lead);
+
+      phasesData.forEach((ph, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'phase-choice-pill' + (idx === activePhaseIndex ? ' active' : '');
+        btn.onclick = () => selectPhase(idx);
+
+        const phaseNum = idx + 1;
+        const nameVal = ph.nom_phase || `Phase ${phaseNum}`;
+        const lotsCount = (typeof ph.lots === 'number') ? ph.lots : 0;
+
+        btn.innerHTML = `<strong>Phase ${phaseNum}</strong> · ${nameVal} <span class="badge-lots">${lotsCount} lot${lotsCount > 1 ? 's' : ''}</span>`;
+        container.appendChild(btn);
+      });
+    }
+
+    // Basculer sur une phase
+    function selectPhase(idx) {
+      activePhaseIndex = idx;
+      renderPhasePills();
+      loadActivePhaseIntoForm();
+    }
+
+    // Charger les valeurs de la phase active dans les champs du formulaire
+    function loadActivePhaseIntoForm() {
+      const ph = phasesData[activePhaseIndex];
+      if (!ph) return;
+
+      const phaseNum = activePhaseIndex + 1;
+      document.getElementById('badge-phase-ident').textContent = ph.title || (`Sous-ensemble ${phaseNum} - Phase ${phaseNum}`);
+      document.getElementById('nom_phase_input').value = ph.nom_phase || `Phase ${phaseNum}`;
+      document.getElementById('nb_lots_input').value = ph.lots || 0;
+      document.getElementById('stade_select').value = ph.stade || 'Développement';
+      document.getElementById('date_coe_input').value = ph.date_coe || '';
+      document.getElementById('regime_select').value = ph.regime || 'RS';
+      document.getElementById('code_patrimoine').value = ph.code_pat || '';
+      document.getElementById('code_sap').value = ph.code_sap || '';
+      document.getElementById('resp_prog_card').value = ph.resp_prog || document.getElementById('top-resp-name').value;
+
+      document.getElementById('zone_loyers_select').value = ph.zone || 'II';
+      document.getElementById('badge-zone-loyer').textContent = 'Zone ' + (ph.zone || 'II');
+      document.getElementById('departement_select').value = ph.dep || '75';
+      updateDRFromDep(ph.dep || '75');
+
+      document.getElementById('code_insee_input').value = ph.insee || '';
+      updateInseeLookup(ph.insee || '');
+
+      document.getElementById('type_op_select').value = ph.type_op || 'DR - CN';
+      document.getElementById('marche_select').value = ph.marche || 'Entreprise Générale';
+      document.getElementById('dian_select').value = ph.dian || 'Non';
+      document.getElementById('anru_select').value = ph.anru || 'Non';
+
+      document.getElementById('surf_sdp_input').value = ph.sdp || 0;
+      document.getElementById('surf_shab_input').value = ph.shab || 0;
+      document.getElementById('surf_communes_input').value = ph.communes || 0;
+      document.getElementById('tfpb_duree_input').value = ph.tfpb || 0;
+
+      document.getElementById('date_pc_depot').value = ph.date_pc_depot || '';
+      document.getElementById('date_pc_obtention').value = ph.date_pc_obtention || '';
+      document.getElementById('date_ao').value = ph.date_ao || '';
+      document.getElementById('date_dossier_fin').value = ph.date_dossier_fin || '';
+      document.getElementById('date_ordre_service').value = ph.date_ordre_service || '';
+      document.getElementById('date_livraison_input').value = ph.date_livraison || '';
+      document.getElementById('date_mes_input').value = ph.date_mes || '';
+
+      updateCalculations();
+    }
+
+    // Gestion de la modification en direct d'un champ
+    function onCurrentPhaseFieldChange(fieldName, value) {
+      const ph = phasesData[activePhaseIndex];
+      if (!ph) return;
+
+      ph[fieldName] = value;
+
+      if (fieldName === 'nom_phase' || fieldName === 'lots') {
+        renderPhasePills();
+      }
+
+      updateCalculations();
+    }
+
+    // Mise à jour de la zone de loyers
+    function onZoneLoyersChange(val) {
+      onCurrentPhaseFieldChange('zone', val);
+      document.getElementById('badge-zone-loyer').textContent = 'Zone ' + val;
+    }
+
+    // Mise à jour département
+    function onDepartementSelectChange(depCode) {
+      onCurrentPhaseFieldChange('dep', depCode);
+      updateDRFromDep(depCode);
+    }
+
+    function updateDRFromDep(depCode) {
+      const item = CP_LIST.find(d => d.code === depCode);
+      const drField = document.getElementById('dr_status_input');
+      if (item && item.de) {
+        drField.value = formatDE(item.de);
+      } else {
+        drField.value = 'Direction Régionale Action Logement';
+      }
+    }
+
+    // Recherche automatique Code INSEE / Commune (Action Cœur de Ville)
+    function onInseeInputChange(codeInsee) {
+      onCurrentPhaseFieldChange('insee', codeInsee);
+      updateInseeLookup(codeInsee);
+    }
+
+    function updateInseeLookup(codeInsee) {
+      const clean = (codeInsee || '').trim();
+      const info = COMMUNES_DB[clean];
+      const cdvField = document.getElementById('cdv_status_input');
+
+      if (info) {
+        if (info.acv) {
+          cdvField.value = 'Éligible Action Cœur de Ville (' + info.acv + ')';
+          cdvField.style.color = 'var(--al-success)';
+          cdvField.style.background = 'var(--al-success-bg)';
+          cdvField.style.borderColor = 'var(--al-success-border)';
+          cdvField.style.fontWeight = '800';
+        } else {
+          cdvField.value = 'Non éligible Cœur de Ville (' + info.nom + ')';
+          cdvField.style.color = 'var(--al-text-muted)';
+          cdvField.style.background = 'var(--al-gray-header)';
+          cdvField.style.borderColor = 'var(--al-border-card)';
+          cdvField.style.fontWeight = '700';
+        }
+
+        if (info.dpt && document.getElementById('departement_select').value !== info.dpt) {
+          document.getElementById('departement_select').value = info.dpt;
+          updateDRFromDep(info.dpt);
+          phasesData[activePhaseIndex].dep = info.dpt;
+        }
+      } else {
+        cdvField.value = clean.length === 5 ? 'Commune ' + clean : 'Non renseigné';
+        cdvField.style.color = 'var(--al-text-muted)';
+        cdvField.style.background = 'var(--al-gray-header)';
+        cdvField.style.borderColor = 'var(--al-border-card)';
+        cdvField.style.fontWeight = '700';
+      }
+    }
+
+    // Recalcul global de toutes les métriques
+    function updateCalculations() {
+      let totalLots = 0;
+      let totalSDP = 0;
+      let totalSHAB = 0;
+      let mesDates = [];
+
+      phasesData.forEach((ph, idx) => {
+        totalLots += (parseInt(ph.lots) || 0);
+        totalSDP += (parseFloat(ph.sdp) || 0);
+        totalSHAB += (parseFloat(ph.shab) || 0);
+
+        if (ph.date_mes && ph.date_mes.trim() !== '') {
+          mesDates.push(ph.date_mes);
+        }
+      });
+
+      document.getElementById('global-total-logements-txt').textContent = totalLots + ' logements au total';
+      document.getElementById('kpi-lots-val').innerHTML = totalLots + ' <span style="font-size:12px;font-weight:600;color:var(--al-text-muted)">lots</span>';
+      
+      const currPhase = phasesData[activePhaseIndex];
+      const curNom = currPhase.nom_phase || ('Phase ' + (activePhaseIndex + 1));
+      document.getElementById('kpi-phase-sub').textContent = 'Phase active : Phase ' + (activePhaseIndex + 1) + ' · ' + curNom + ' (' + (currPhase.lots || 0) + ' lots)';
+
+      document.getElementById('kpi-sdp-val').innerHTML = totalSDP.toLocaleString('fr-FR') + ' <span style="font-size:12px;font-weight:600;color:var(--al-text-muted)">m² SDP</span>';
+      document.getElementById('kpi-shab-sub').textContent = 'SHAB totale : ' + totalSHAB.toLocaleString('fr-FR') + ' m²';
+
+      const curSDP = parseFloat(document.getElementById('surf_sdp_input').value) || 0;
+      const curSHAB = parseFloat(document.getElementById('surf_shab_input').value) || 0;
+      const ratioTxt = document.getElementById('ratio-txt');
+      const gaugeBar = document.getElementById('gauge-bar');
+
+      if (curSDP > 0) {
+        const ratio = (curSHAB / curSDP) * 100;
+        const width = Math.min(ratio, 100);
+        gaugeBar.style.width = width + '%';
+        const fmt = ratio.toFixed(1).replace('.', ',') + ' %';
+
+        if (ratio >= 80) {
+          ratioTxt.textContent = fmt + ' (Optimal)';
+          ratioTxt.style.color = 'var(--al-success)';
+          gaugeBar.style.background = 'var(--al-success)';
+        } else if (ratio >= 70) {
+          ratioTxt.textContent = fmt + ' (Vigilance)';
+          ratioTxt.style.color = 'var(--al-amber)';
+          gaugeBar.style.background = 'var(--al-amber)';
+        } else {
+          ratioTxt.textContent = fmt + ' (Sous-optimal)';
+          ratioTxt.style.color = 'var(--al-red)';
+          gaugeBar.style.background = 'var(--al-red)';
+        }
+      } else {
+        ratioTxt.textContent = '- %';
+        gaugeBar.style.width = '0%';
+      }
+
+      const kpiRatioVal = document.getElementById('kpi-ratio-val');
+      if (totalSDP > 0) {
+        const globalRatio = (totalSHAB / totalSDP) * 100;
+        kpiRatioVal.textContent = globalRatio.toFixed(1).replace('.', ',') + ' %';
+        kpiRatioVal.style.color = globalRatio >= 80 ? 'var(--al-success)' : (globalRatio >= 70 ? 'var(--al-amber)' : 'var(--al-red)');
+      } else {
+        kpiRatioVal.textContent = '- %';
+      }
+
+      // 1. Date MES de la phase active (Carte 4)
+      const curPhase = phasesData[activePhaseIndex];
+      const mesPhaseTxt = document.getElementById('mes-phase-txt');
+      if (curPhase && curPhase.date_mes && curPhase.date_mes.trim() !== '') {
+        const parts = curPhase.date_mes.split('-');
+        mesPhaseTxt.textContent = parts[2] + '/' + parts[1] + '/' + parts[0];
+      } else {
+        mesPhaseTxt.textContent = 'Non renseignée';
+      }
+
+      // 2. 1ère Date MES globale de l'opération (=MIN Excel cellule H7)
+      const kpiLivraisonVal = document.getElementById('kpi-livraison-val');
+      const kpiMesOrigin = document.getElementById('kpi-mes-origin');
+      let earliestDate = null;
+      let earliestPhase = '';
+      
+      phasesData.forEach((ph, idx) => {
+        if (ph.date_mes && ph.date_mes.trim() !== '') {
+          if (!earliestDate || ph.date_mes < earliestDate) {
+            earliestDate = ph.date_mes;
+            earliestPhase = 'Phase ' + (idx + 1) + ' (' + (ph.nom_phase || '') + ')';
+          }
+        }
+      });
+
+      if (earliestDate) {
+        const parts = earliestDate.split('-');
+        kpiLivraisonVal.textContent = parts[2] + '/' + parts[1] + '/' + parts[0];
+        if (kpiMesOrigin) {
+          kpiMesOrigin.textContent = earliestPhase + ' · Jalon le plus précoce (=MIN Excel)';
+        }
+      } else {
+        kpiLivraisonVal.textContent = '-';
+        if (kpiMesOrigin) {
+          kpiMesOrigin.textContent = 'Aucune date renseignée';
+        }
+      }
+    }
+
+    function ajouterNouvellePhase() {
+      const nextNum = phasesData.length + 1;
+      const sefCode = "SEF" + (nextNum < 10 ? "0" + nextNum : nextNum);
+      const newPh = {
+        id: nextNum,
+        title: sefCode + " - Sous-ensemble " + nextNum,
+        nom_phase: sefCode,
+        type_desc: "Nouvelle tranche " + nextNum,
+        lots: 0,
+        stade: "Développement",
+        date_coe: "",
+        regime: "RS",
+        code_pat: "PAT-75013-00" + nextNum,
+        code_sap: "SAP-2026-9" + nextNum,
+        resp_prog: document.getElementById('top-resp-name').value,
+        zone: "II",
+        dep: "75",
+        insee: "75056",
+        type_op: "DR - CN",
+        marche: "Entreprise Générale",
+        dian: "Non",
+        anru: "Non",
+        sdp: 0,
+        shab: 0,
+        communes: 0,
+        tfpb: 0,
+        date_pc_depot: "",
+        date_pc_obtention: "",
+        date_ao: "",
+        date_dossier_fin: "",
+        date_ordre_service: "",
+        date_livraison: "",
+        date_mes: ""
+      };
+      phasesData.push(newPh);
+      selectPhase(phasesData.length - 1);
+      afficherToast("Nouvelle phase " + sefCode + " ajoutée dynamiquement.");
+    }
+
+    function syncRespName(val) {
+      phasesData.forEach(p => p.resp_prog = val);
+      document.getElementById('resp_prog_card').value = val;
+    }
+
+    function enregistrerSaisie() {
+      afficherToast("Toutes les données des phases ont été enregistrées avec succès.");
+    }
+
+    function reinitialiserDossier() {
+      if (confirm("Réinitialiser toutes les saisies à zéro ?")) {
+        phasesData.forEach((p, i) => {
+          p.lots = 0;
+          p.sdp = 0;
+          p.shab = 0;
+        });
+        loadActivePhaseIntoForm();
+        renderPhasePills();
+        afficherToast("Dossier réinitialisé.");
+      }
+    }
+
+    
+    function passerEtapeSuivante(targetTab) {
+      enregistrerSaisie();
+      
+      const toast = document.getElementById('saveToast');
+      document.getElementById('toastText').textContent = "Données enregistrées. Passage à l'étape suivante : " + targetTab + "...";
+      toast.classList.add('show');
+
+      document.querySelectorAll('.nav-pill-btn').forEach(btn => {
+        if (btn.textContent.trim().includes(targetTab)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        ouvrirMessageOnglet(targetTab);
+      }, 700);
+    }
+
+    function ouvrirMessageOnglet(nom) {
+      afficherToast("Onglet " + nom + " : Module opérationnel connecté.");
+    }
+
+    function afficherToast(msg) {
+      const toast = document.getElementById('saveToast');
+      document.getElementById('toastText').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 2500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDepartementsSelect();
+      renderPhasePills();
+      selectPhase(1); // Démarre sur Phase 2 (Construction Neuve)
+    });
+  </script>
+</body>
+</html>
