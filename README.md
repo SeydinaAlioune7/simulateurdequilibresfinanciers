@@ -1,4 +1,4 @@
-# Simulateur d\'Équilibres Financiers d\'Opérations (EUREKA 2026)
+# Simulateur d'Équilibres Financiers (EUREKA 2026)
 ### Action Logement Services · Direction des Financements Bailleurs et Collectivités (DFBC)
 
 Outil web interactif d\'instruction financière et de modélisation prévisionnelle des opérations de logement social et résidences conventionnées (Résidences Sociales, Foyers, Pensions de Famille, Hébergement).
